@@ -9,7 +9,7 @@ import { formatMoney } from '@/lib/pricing';
 import { paymentLabel } from '@/config';
 
 export function Orders() {
-  usePageMeta('我的订单', '查看保存在本机的 TideSMM 订单记录。');
+  usePageMeta('我的订单', '查看保存在本机的 AU9922 订单记录。');
   const [orders, setOrders] = useState<Order[]>(() => readOrders());
 
   const refresh = () => setOrders(readOrders());

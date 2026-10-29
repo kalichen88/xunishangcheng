@@ -24,27 +24,30 @@ export function quantityUnit(service: Service): string {
 
 export function itemSubtotalCents(service: Service, quantity: number): number {
   const qty = clampQuantity(service, quantity);
-  const yuan =
+  const amount =
     service.pricing === 'fixed' ? service.rate * qty : (service.rate * qty) / 1000;
-  return Math.max(1, Math.round(yuan * 100));
+  return Math.max(1, Math.round(amount * 100));
 }
 
 export function formatRate(rate: number): string {
   return new Intl.NumberFormat('zh-CN', {
-    maximumFractionDigits: 3,
+    maximumFractionDigits: 5,
     minimumFractionDigits: 0,
   }).format(rate);
 }
 
 export function formatMoney(cents: number): string {
-  return `¥${new Intl.NumberFormat('zh-CN', {
+  return `$${new Intl.NumberFormat('zh-CN', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(cents / 100)}`;
 }
 
-export function formatYuan(yuan: number): string {
-  return formatMoney(Math.round(yuan * 100));
+export function usdtAmount(cents: number): string {
+  return new Intl.NumberFormat('zh-CN', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(cents / 100);
 }
 
 export function rateUnit(service: Service): string {

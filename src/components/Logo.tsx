@@ -25,7 +25,7 @@ export function WaveMark({ className = '' }: { className?: string }) {
 
 export function Logo({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
   return (
-    <Link to="/" className="group flex items-center gap-2.5" aria-label="TideSMM 首页">
+    <Link to="/" className="group flex items-center gap-2.5" aria-label="AU9922 首页">
       <WaveMark className="h-9 w-9 transition-transform duration-300 group-hover:-rotate-6" />
       <span className="flex flex-col leading-none">
         <span
@@ -33,14 +33,14 @@ export function Logo({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
             tone === 'light' ? 'text-cream' : 'text-ink'
           }`}
         >
-          TideSMM
+          AU9922
         </span>
         <span
           className={`mt-1 text-[9px] font-medium tracking-[0.26em] ${
             tone === 'light' ? 'text-cream/45' : 'text-muted'
           }`}
         >
-          潮汐增长
+          全球社媒增长
         </span>
       </span>
     </Link>

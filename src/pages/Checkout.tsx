@@ -1,22 +1,28 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Check, Loader2, Lock, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Copy, Loader2, Lock, ShieldCheck } from 'lucide-react';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { PlatformBadge } from '@/components/PlatformIcon';
 import { useCart } from '@/components/CartProvider';
 import { useToast } from '@/components/Toast';
-import { buildOrderLine, makeOrder, saveOrder, type CustomerInfo } from '@/lib/orders';
+import {
+  buildOrderLine,
+  copyText,
+  makeOrder,
+  saveOrder,
+  type CustomerInfo,
+} from '@/lib/orders';
 import type { Order } from '@/lib/orders';
-import { formatMoney } from '@/lib/pricing';
+import { formatMoney, usdtAmount } from '@/lib/pricing';
 import { getOrderChannel, submitOrder, type OrderChannel } from '@/lib/api';
-import { paymentLabel, paymentMethods, site } from '@/config';
+import { payment, site } from '@/config';
 
 type Errors = Partial<Record<'name' | 'contact' | 'email' | 'agree', string>>;
 
 const steps = ['购物车', '填写信息', '完成'];
 
 export function Checkout() {
-  usePageMeta('结算', '填写联系方式与支付方式，提交 TideSMM 订单。');
+  usePageMeta('结算', '填写联系方式，按 USDT-TRC20 付款并提交 AU9922 订单。');
   const { detailed, itemCount, subtotalCents, clear } = useCart();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -24,12 +30,19 @@ export function Checkout() {
   const [name, setName] = useState('');
   const [contact, setContact] = useState('');
   const [email, setEmail] = useState('');
-  const [payment, setPayment] = useState('usdt');
   const [note, setNote] = useState('');
   const [agree, setAgree] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [channel, setChannel] = useState<OrderChannel | 'checking'>('checking');
+
+  const copyAddress = async () => {
+    const ok = await copyText(payment.address);
+    toast(
+      ok ? 'USDT-TRC20 收款地址已复制' : '复制失败，请手动选择地址',
+      ok ? 'success' : 'error',
+    );
+  };
 
   useEffect(() => {
     let alive = true;
@@ -78,7 +91,7 @@ export function Checkout() {
       name: name.trim(),
       contact: contact.trim(),
       email: email.trim(),
-      payment,
+      payment: payment.key,
       note: note.trim().slice(0, 500),
     };
     const lines = detailed.map(({ line, service }) =>
@@ -233,52 +246,60 @@ export function Checkout() {
                 02
               </span>
               <div>
-                <h2 className="text-[15px] font-semibold text-ink">支付方式</h2>
-                <p className="text-[10.5px] text-muted">提交后由客服发送收款信息，本页不会直接扣款。</p>
+                <h2 className="text-[15px] font-semibold text-ink">收款方式</h2>
+                <p className="text-[10.5px] text-muted">
+                  仅支持 USDT-TRC20，1 USD = 1 USDT。本页不会直接扣款。
+                </p>
               </div>
             </div>
 
-            <div className="mt-5 grid gap-2 sm:grid-cols-2">
-              {paymentMethods.map((method) => {
-                const selected = payment === method.key;
-                return (
-                  <label
-                    key={method.key}
-                    className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-3.5 transition ${
-                      selected
-                        ? 'border-ink bg-ink text-cream'
-                        : 'border-line bg-paper/60 text-ink hover:border-line-strong'
-                    }`}
+            <div className="mt-5 rounded-2xl bg-ink p-4 text-cream sm:p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-2 text-[12px] font-semibold">
+                  <span className="h-2 w-2 rounded-full bg-lime" />
+                  USDT · TRC-20
+                </span>
+                <span className="rounded-full border border-cream/15 px-2.5 py-1 text-[9px] text-cream/55">
+                  1 USD = 1 USDT
+                </span>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-cream/10 bg-cream/[0.05] p-3">
+                <p className="text-[9px] tracking-[0.12em] text-cream/35 uppercase">收款地址</p>
+                <div className="mt-1.5 flex items-start gap-2">
+                  <code className="min-w-0 flex-1 break-all font-mono text-[11px] leading-relaxed text-lime">
+                    {payment.address}
+                  </code>
+                  <button
+                    type="button"
+                    onClick={copyAddress}
+                    className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-cream/15 text-cream/60 transition hover:border-lime hover:text-lime"
+                    aria-label="复制 USDT 收款地址"
                   >
-                    <input
-                      type="radio"
-                      name="payment"
-                      value={method.key}
-                      checked={selected}
-                      onChange={() => setPayment(method.key)}
-                      className="sr-only"
-                    />
-                    <span
-                      className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full border ${
-                        selected ? 'border-lime bg-lime text-ink' : 'border-line-strong'
-                      }`}
-                    >
-                      {selected ? <Check size={9} strokeWidth={3} /> : null}
-                    </span>
-                    <span>
-                      <span className="block text-[12px] font-semibold">{method.label}</span>
-                      <span
-                        className={`mt-0.5 block text-[10px] leading-relaxed ${
-                          selected ? 'text-cream/50' : 'text-muted'
-                        }`}
-                      >
-                        {method.hint}
-                      </span>
-                    </span>
-                  </label>
-                );
-              })}
+                    <Copy size={13} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-4 flex items-end justify-between border-t border-cream/10 pt-3">
+                <div>
+                  <p className="text-[9px] text-cream/40">应付金额</p>
+                  <p className="num mt-0.5 text-[24px] font-semibold text-lime">
+                    {formatMoney(subtotalCents)}
+                  </p>
+                </div>
+                <p className="num text-right text-[10px] leading-relaxed text-cream/50">
+                  = {usdtAmount(subtotalCents)} USDT
+                  <br />
+                  请核对 TRC20 网络
+                </p>
+              </div>
             </div>
+
+            <p className="mt-3 text-[10px] leading-relaxed text-muted/70">
+              提交订单后，请按上方地址转账，并把交易哈希（TxID）发送给 Telegram{' '}
+              {site.telegramHandle} 核对。转错网络或地址无法追回。
+            </p>
           </div>
 
           <div className="rounded-[24px] border border-line bg-cream p-5 sm:p-7">
@@ -402,8 +423,8 @@ export function Checkout() {
                 <span className="num text-ink">{formatMoney(subtotalCents)}</span>
               </div>
               <div className="mt-2 flex items-center justify-between text-[11px] text-muted">
-                <span>支付方式</span>
-                <span className="text-ink">{paymentLabel(payment)}</span>
+                <span>收款方式</span>
+                <span className="text-ink">USDT-TRC20</span>
               </div>
               <div className="mt-4 flex items-end justify-between border-t border-line pt-4">
                 <span className="text-[12px] font-medium text-ink">应付合计</span>
@@ -414,7 +435,7 @@ export function Checkout() {
             </div>
             <p className="mt-4 flex items-start gap-1.5 text-[10px] leading-relaxed text-muted/70">
               <ShieldCheck size={12} className="mt-0.5 shrink-0" />
-              最终金额以客服确认的支付信息为准。未开始交付前可联系客服协商取消。
+              最终金额以页面显示的 USDT 金额为准。未开始交付前可联系客服协商取消。
             </p>
           </div>
 
@@ -427,7 +448,7 @@ export function Checkout() {
           </div>
 
           <div className="mt-3 rounded-2xl border border-line bg-paper px-4 py-3.5 text-[10.5px] leading-relaxed text-muted">
-            客服：{site.telegramHandle} · {site.email}
+            客服：{site.telegramHandle} · USDT-TRC20
           </div>
         </aside>
       </div>

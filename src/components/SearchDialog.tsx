@@ -143,7 +143,7 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
                     </span>
                   </span>
                   <span className="num shrink-0 text-[13px] font-semibold">
-                    ¥{formatRate(service.rate)}
+                    ${formatRate(service.rate)}
                     <span
                       className={`ml-0.5 text-[10px] font-normal ${
                         index === selected ? 'text-cream/50' : 'text-muted'

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Mail, Send } from 'lucide-react';
+import { ArrowUpRight, Send } from 'lucide-react';
 import { Logo } from './Logo';
 import { site } from '@/config';
 
@@ -41,14 +41,11 @@ export function Footer() {
                 rel="noreferrer"
                 className="inline-flex h-9 items-center gap-2 rounded-full border border-cream/15 px-3.5 text-[11px] text-cream/75 transition hover:border-lime hover:text-lime"
               >
-                <Send size={12} /> Telegram
+                <Send size={12} /> {site.telegramHandle}
               </a>
-              <a
-                href={`mailto:${site.email}`}
-                className="inline-flex h-9 items-center gap-2 rounded-full border border-cream/15 px-3.5 text-[11px] text-cream/75 transition hover:border-lime hover:text-lime"
-              >
-                <Mail size={12} /> Email
-              </a>
+              <span className="inline-flex h-9 items-center gap-2 rounded-full border border-cream/15 px-3.5 text-[11px] text-cream/55">
+                USDT-TRC20
+              </span>
             </div>
           </div>
 
@@ -87,17 +84,12 @@ export function Footer() {
                   {site.telegramHandle} <ArrowUpRight size={12} />
                 </a>
               </li>
-              <li>
-                <a href={`mailto:${site.email}`} className="transition hover:text-lime">
-                  {site.email}
-                </a>
-              </li>
               <li className="pt-1 text-[11px] text-cream/35">{site.serviceHours}</li>
             </ul>
             <p className="mt-5 text-[10px] leading-relaxed text-cream/35">
-              支付方式：USDT · 支付宝 · 微信支付 · 银行转账
+              支付方式：USDT-TRC20
               <br />
-              以客服确认信息为准
+              1 USD = 1 USDT
             </p>
           </div>
         </div>
@@ -113,7 +105,7 @@ export function Footer() {
 
       <div className="pointer-events-none select-none px-3 pb-4" aria-hidden="true">
         <p className="font-grotesk text-center text-[clamp(64px,15.5vw,210px)] leading-[0.82] font-bold tracking-[-0.07em] text-cream/[0.055]">
-          TIDESMM
+          AU9922
         </p>
       </div>
     </footer>

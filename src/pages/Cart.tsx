@@ -79,7 +79,7 @@ export function Cart() {
                     {service.platformName} · {shortTypeName(service.type)} · 服务 #{service.id}
                   </p>
                   <p className="num mt-1 text-[10.5px] text-muted/70">
-                    ¥{formatRate(service.rate)} / {rateUnit(service)} · 起订 {service.min}
+                    ${formatRate(service.rate)} / {rateUnit(service)} · 起订 {service.min}
                   </p>
                 </div>
                 <button

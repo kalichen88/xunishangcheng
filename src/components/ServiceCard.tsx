@@ -39,7 +39,7 @@ export function ServiceCard({ service }: { service: Service }) {
         <div>
           <div className="flex items-baseline gap-1">
             <span className="num text-[22px] font-semibold tracking-[-0.03em] text-ink">
-              ¥{formatRate(service.rate)}
+              ${formatRate(service.rate)}
             </span>
             <span className="text-[11px] text-muted">/ {rateUnit(service)}</span>
           </div>

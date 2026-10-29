@@ -5,7 +5,6 @@ import {
   ArrowRight,
   Check,
   Copy,
-  Mail,
   Send,
   ShieldCheck,
   TriangleAlert,
@@ -15,8 +14,8 @@ import { PlatformBadge } from '@/components/PlatformIcon';
 import { useToast } from '@/components/Toast';
 import { copyText, getOrder, orderChannelLabel, orderText } from '@/lib/orders';
 import type { Order } from '@/lib/orders';
-import { formatMoney, formatRate } from '@/lib/pricing';
-import { paymentLabel, site } from '@/config';
+import { formatMoney, formatRate, usdtAmount } from '@/lib/pricing';
+import { payment, paymentLabel, site } from '@/config';
 
 export function OrderDetail() {
   const { id } = useParams();
@@ -67,7 +66,7 @@ export function OrderDetail() {
           ? '订单详情已发送至客服通知通道，客服会通过你留下的联系方式确认支付与目标链接。'
           : order.channel === 'database'
             ? '订单已提交到客服后台，客服会通过你留下的联系方式确认支付与目标链接。'
-            : '订单尚未发送给客服。请复制订单信息，通过 Telegram 或邮件发送，等待客服确认。',
+            : '订单尚未发送给客服。请复制订单信息，通过 Telegram 发送，等待客服确认。',
       state: 'current',
     },
     {
@@ -85,6 +84,14 @@ export function OrderDetail() {
   const handleCopy = async () => {
     const ok = await copyText(orderText(order));
     toast(ok ? '订单信息已复制' : '复制失败，请手动选择订单信息', ok ? 'success' : 'error');
+  };
+
+  const copyAddress = async () => {
+    const ok = await copyText(payment.address);
+    toast(
+      ok ? 'USDT-TRC20 收款地址已复制' : '复制失败，请手动选择地址',
+      ok ? 'success' : 'error',
+    );
   };
 
   return (
@@ -132,7 +139,7 @@ export function OrderDetail() {
                 <div>
                   <p className="text-[11px] font-semibold text-ink">这笔订单还没有发送给客服</p>
                   <p className="mt-0.5 text-[10.5px] leading-relaxed text-muted">
-                    点击右侧「复制订单信息」，通过 Telegram 或邮件发送给客服，确认支付后开始排期。
+                    点击右侧「复制订单信息」，通过 Telegram 发送给客服，确认支付后开始排期。
                   </p>
                 </div>
               </div>
@@ -202,7 +209,7 @@ export function OrderDetail() {
                         {item.name}
                       </Link>
                       <p className="num mt-1 text-[10px] text-muted">
-                        {item.quantity.toLocaleString('zh-CN')} {item.pricing === 'fixed' ? '件' : '次'} × ¥
+                        {item.quantity.toLocaleString('zh-CN')} {item.pricing === 'fixed' ? '件' : '次'} × $
                         {formatRate(item.rate)} / {item.pricing === 'fixed' ? '件' : '千次'}
                       </p>
                       <p className="mt-1 break-all text-[10px] text-muted">
@@ -267,12 +274,44 @@ export function OrderDetail() {
                 <Send size={14} />
                 联系客服
               </a>
-              <a
-                href={`mailto:${site.email}?subject=${encodeURIComponent(`订单 ${order.id}`)}&body=${encodeURIComponent(orderText(order))}`}
-                className="mt-2 flex w-full items-center justify-center gap-1.5 py-1 text-[10px] text-muted transition hover:text-ink"
-              >
-                <Mail size={11} /> 用邮件发送订单
-              </a>
+            </div>
+
+            <div className="rounded-2xl border border-ink bg-ink p-4 text-cream">
+              <div className="flex items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold">
+                  <span className="h-1.5 w-1.5 rounded-full bg-lime" />
+                  USDT · TRC-20
+                </span>
+                <span className="rounded-full border border-cream/15 px-2 py-0.5 text-[8.5px] text-cream/50">
+                  待支付
+                </span>
+              </div>
+              <p className="mt-3 text-[9px] text-cream/40">应付金额</p>
+              <p className="num mt-0.5 text-[22px] font-semibold text-lime">
+                {formatMoney(order.totalCents)}
+              </p>
+              <p className="num text-[9.5px] text-cream/45">
+                = {usdtAmount(order.totalCents)} USDT
+              </p>
+              <div className="mt-3 rounded-xl border border-cream/10 bg-cream/[0.05] p-2.5">
+                <p className="text-[8.5px] tracking-[0.1em] text-cream/35 uppercase">收款地址</p>
+                <div className="mt-1 flex items-start gap-1.5">
+                  <code className="min-w-0 flex-1 break-all font-mono text-[9.5px] leading-relaxed text-lime">
+                    {payment.address}
+                  </code>
+                  <button
+                    type="button"
+                    onClick={copyAddress}
+                    className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-cream/15 text-cream/60 transition hover:border-lime hover:text-lime"
+                    aria-label="复制 USDT 收款地址"
+                  >
+                    <Copy size={10} />
+                  </button>
+                </div>
+              </div>
+              <p className="mt-2 text-[9px] leading-relaxed text-cream/40">
+                转账后请把交易哈希（TxID）发送给 {site.telegramHandle} 核对，仅支持 TRC20。
+              </p>
             </div>
 
             <div className="rounded-2xl border border-line bg-paper p-4">

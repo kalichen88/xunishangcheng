@@ -109,7 +109,7 @@ await desktop.screenshot({ path: path.join(OUT, 'detail-desktop.png'), fullPage:
 const detailState = await desktop.evaluate(() => ({
   title: document.title,
   h1: document.querySelector('h1')?.textContent?.trim(),
-  price: document.body.innerText.includes('0.608'),
+  price: document.body.innerText.includes('0.08444'),
 }));
 console.log('DETAIL', detailState);
 
@@ -130,7 +130,7 @@ await desktop.waitForTimeout(800);
 await fullPageShot(desktop, 'checkout-desktop.png');
 
 await desktop.fill('#name', '测试客户');
-await desktop.fill('#contact', '@tidesmm_test');
+await desktop.fill('#contact', '@au9922_test');
 await desktop.fill('#email', 'test@example.com');
 await desktop.locator('label').filter({ hasText: '我已阅读并同意' }).click();
 await desktop.waitForFunction(() => {

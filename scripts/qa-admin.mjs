@@ -31,7 +31,7 @@ await page.screenshot({ path: path.resolve('research/shots/admin-orders.png'), f
 
 const state = await page.evaluate(() => ({
   heading: document.querySelector('h1')?.textContent?.trim(),
-  hasOrder: document.body.innerText.includes('TS-2026'),
+  hasOrder: document.body.innerText.includes('AU-2026'),
   hasCustomer: document.body.innerText.includes('测试客户') || document.body.innerText.includes('后台测试'),
   text: document.body.innerText.slice(0, 600),
 }));

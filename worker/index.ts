@@ -1,4 +1,5 @@
 import rawCatalog from '../src/data/catalog.json';
+import { site } from '../src/config';
 
 interface ServiceRecord {
   id: number;
@@ -46,12 +47,9 @@ const SERVICES = new Map<number, ServiceRecord>(
   (rawCatalog as unknown as CatalogJson).services.map((service) => [service.id, service]),
 );
 
-const PAYMENTS = new Set(['usdt', 'alipay', 'wechat', 'bank']);
+const PAYMENTS = new Set(['usdt']);
 const PAYMENT_LABELS: Record<string, string> = {
-  usdt: 'USDT',
-  alipay: '支付宝',
-  wechat: '微信支付',
-  bank: '银行转账',
+  usdt: 'USDT-TRC20',
 };
 
 const SECURITY_HEADERS: Record<string, string> = {
@@ -93,17 +91,17 @@ function makeOrderId(now = new Date()): string {
   const suffix = Array.from(bytes, (byte) => (byte % 36).toString(36))
     .join('')
     .toUpperCase();
-  return `TS-${stamp}-${suffix}`;
+  return `AU-${stamp}-${suffix}`;
 }
 
 function itemTotalCents(service: ServiceRecord, quantity: number): number {
-  const yuan =
+  const amount =
     service.pricing === 'fixed' ? service.rate * quantity : (service.rate * quantity) / 1000;
-  return Math.max(1, Math.round(yuan * 100));
+  return Math.max(1, Math.round(amount * 100));
 }
 
 function money(cents: number): string {
-  return `¥${(cents / 100).toFixed(2)}`;
+  return `$${(cents / 100).toFixed(2)}`;
 }
 
 function parseOrder(raw: unknown): { ok: true; order: IncomingOrder } | { ok: false; error: string } {
@@ -172,7 +170,7 @@ function itemSnapshots(order: IncomingOrder) {
 
 function buildMessage(order: IncomingOrder, orderId: string, totalCents: number): string {
   const lines: string[] = [
-    '<b>🛒 TideSMM 新订单</b>',
+    '<b>🛒 AU9922 新订单</b>',
     `<b>${escapeHtml(orderId)}</b>`,
     `客户：${escapeHtml(order.customer.name)}`,
     `联系：${escapeHtml(order.customer.contact)}`,
@@ -188,12 +186,17 @@ function buildMessage(order: IncomingOrder, orderId: string, totalCents: number)
     const subtotal = itemTotalCents(service, item.quantity);
     lines.push(
       `${index + 1}. ${escapeHtml(service.name.slice(0, 120))}`,
-      `   ${item.quantity} × ¥${service.rate} / ${unit} = ${money(subtotal)}`,
+      `   ${item.quantity} × $${service.rate} / ${unit} = ${money(subtotal)}`,
     );
     if (item.target) lines.push(`   目标：${escapeHtml(item.target.slice(0, 220))}`);
   });
 
-  lines.push('', `<b>合计：${money(totalCents)}</b>`);
+  lines.push(
+    '',
+    `<b>应付：${money(totalCents)}（${(totalCents / 100).toFixed(2)} USDT）</b>`,
+    `收款地址（TRC20）：<code>${escapeHtml(site.usdtAddress)}</code>`,
+    '转账后请客户把 TxID 发给客服核对。',
+  );
   if (order.customer.note) lines.push(`备注：${escapeHtml(order.customer.note)}`);
   lines.push(`时间：${new Date().toISOString()}`);
   return lines.join('\n');

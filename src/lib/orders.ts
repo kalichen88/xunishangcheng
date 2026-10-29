@@ -1,4 +1,4 @@
-import { paymentLabel } from '@/config';
+import { payment, paymentLabel, site } from '@/config';
 import { itemSubtotalCents } from './pricing';
 import { getService } from './catalog';
 import type { PricingMode, Service } from './types';
@@ -39,7 +39,7 @@ const ORDERS_KEY = 'orders.v1';
 export function createOrderId(now = new Date()): string {
   const stamp = now.toISOString().slice(0, 10).replace(/-/g, '');
   const random = Math.random().toString(36).slice(2, 6).toUpperCase().padEnd(4, '0');
-  return `TS-${stamp}-${random}`;
+  return `AU-${stamp}-${random}`;
 }
 
 export function buildOrderLine(service: Service, quantity: number, target: string): OrderLine {
@@ -91,7 +91,7 @@ export function getOrder(id: string): Order | undefined {
 
 export function orderText(order: Order): string {
   const lines = [
-    `TideSMM 订单 ${order.id}`,
+    `AU9922 订单 ${order.id}`,
     `创建时间：${new Date(order.createdAt).toLocaleString('zh-CN')}`,
     `称呼：${order.customer.name}`,
     `联系方式：${order.customer.contact}`,
@@ -103,12 +103,17 @@ export function orderText(order: Order): string {
   order.items.forEach((item, index) => {
     lines.push(
       `${index + 1}. ${item.name}`,
-      `   数量：${item.quantity}${item.pricing === 'fixed' ? ' 件' : ' 次'}｜单价：¥${item.rate}${item.pricing === 'fixed' ? '/件' : '/千次'}`,
+      `   数量：${item.quantity}${item.pricing === 'fixed' ? ' 件' : ' 次'}｜单价：$${item.rate}${item.pricing === 'fixed' ? '/件' : '/千次'}`,
       `   目标：${item.target || '待补充'}`,
-      `   小计：¥${(item.subtotalCents / 100).toFixed(2)}`,
+      `   小计：$${(item.subtotalCents / 100).toFixed(2)}`,
     );
   });
-  lines.push('', `合计：¥${(order.totalCents / 100).toFixed(2)}`);
+  lines.push(
+    '',
+    `合计：$${(order.totalCents / 100).toFixed(2)} = ${(order.totalCents / 100).toFixed(2)} USDT`,
+    `收款地址（USDT-TRC20）：${payment.address}`,
+    `转账后请把交易哈希（TxID）发送给 ${site.telegramHandle} 核对。`,
+  );
   if (order.customer.note) lines.push(`备注：${order.customer.note}`);
   return lines.join('\n');
 }

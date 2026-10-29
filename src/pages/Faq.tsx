@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Mail, Send } from 'lucide-react';
+import { ArrowUpRight, Send } from 'lucide-react';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { FaqAccordion } from '@/components/FaqAccordion';
 import { faqItems } from '@/content/faq';
 import { site } from '@/config';
 
 export function Faq() {
-  usePageMeta('常见问题', 'TideSMM 下单、支付、交付与售后常见问题。');
+  usePageMeta('常见问题', 'AU9922 下单、支付、交付与售后常见问题。');
   return (
     <section className="container-page py-12 sm:py-16">
       <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr]">
@@ -31,11 +31,11 @@ export function Faq() {
                 rel="noreferrer"
                 className="btn btn-dark btn-sm w-full"
               >
-                <Send size={13} /> Telegram 客服
+                <Send size={13} /> {site.telegramHandle}
               </a>
-              <a href={`mailto:${site.email}`} className="btn btn-outline btn-sm w-full">
-                <Mail size={13} /> 发送邮件
-              </a>
+              <p className="rounded-xl border border-line bg-paper px-3 py-2 text-center text-[10px] text-muted">
+                USDT-TRC20 · 1 USD = 1 USDT
+              </p>
             </div>
             <p className="mt-3 text-[9.5px] text-muted/60">服务时间：{site.serviceHours}</p>
           </div>

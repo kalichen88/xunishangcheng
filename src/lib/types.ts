@@ -52,7 +52,8 @@ export interface TypeInfo {
 
 export interface CatalogData {
   generatedAt: string;
-  currency: string;
+  currency: 'USD' | string;
+  exchangeRateCnyPerUsd?: number;
   total: number;
   platforms: PlatformInfo[];
   types: TypeInfo[];

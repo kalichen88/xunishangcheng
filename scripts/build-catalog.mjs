@@ -1,10 +1,18 @@
 /**
- * Normalize the public price table snapshot into the storefront catalog.
+ * Normalize the public price table snapshot into the AU9922 storefront catalog.
  * Source: data/catalog.source.json (captured 2026-10-29 from the public
- * service price table). Branding, copy and design are original to TideSMM.
+ * service price table). Branding, copy and design are original to AU9922.
+ *
+ * The source table prices are CNY. The storefront prices everything in USD
+ * (1 USD = 1 USDT). Set CNY_PER_USD to change the conversion.
  */
 import fs from 'node:fs';
 import path from 'node:path';
+
+const CNY_PER_USD = Number(process.env.CNY_PER_USD ?? 7.2);
+if (!Number.isFinite(CNY_PER_USD) || CNY_PER_USD <= 0) {
+  throw new Error('CNY_PER_USD must be a positive number');
+}
 
 const root = path.resolve(import.meta.dirname, '..');
 const source = JSON.parse(fs.readFileSync(path.join(root, 'data/catalog.source.json'), 'utf8'));
@@ -99,7 +107,7 @@ for (const raw of source.services) {
     category,
     name,
     type,
-    rate: Number(rate.toFixed(3)),
+    rate: Number((rate / CNY_PER_USD).toFixed(5)),
     min,
     max,
     avgTime: clean(raw.avgTime) || '以客服确认为准',
@@ -124,7 +132,8 @@ const featured = featuredIds.map((id) => services.find((s) => s.id === id)).filt
 
 const output = {
   generatedAt: '2026-10-29',
-  currency: 'CNY',
+  currency: 'USD',
+  exchangeRateCnyPerUsd: CNY_PER_USD,
   total: services.length,
   platforms: PLATFORMS.map((p) => ({
     key: p.key,
@@ -151,5 +160,6 @@ fs.writeFileSync(path.join(root, 'src/data/catalog.json'), JSON.stringify(output
 console.log(
   `catalog: ${output.total} services, ${output.platforms.length} platforms, ${output.types.length} types`,
 );
+console.log(`prices: CNY ÷ ${CNY_PER_USD} → USD (1 USD = 1 USDT)`);
 for (const p of output.platforms) console.log(`  ${p.name.padEnd(12)} ${p.count}`);
 console.log('featured:', featured.map((s) => `${s.id} ${s.name}`).join('\n  '));

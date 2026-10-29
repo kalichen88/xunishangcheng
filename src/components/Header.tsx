@@ -80,7 +80,7 @@ export function Header() {
             独立第三方社媒增长服务商
           </span>
           <span className="hidden sm:block">
-            10 个平台 · {catalog.total.toLocaleString('zh-CN')} 项服务 · 人民币计价
+            10 个平台 · {catalog.total.toLocaleString('zh-CN')} 项服务 · 美元计价
           </span>
         </div>
       </div>

@@ -32,6 +32,9 @@ import { deliveryLabel, formatRate, formatMoney, itemSubtotalCents } from '@/lib
 import { faqItems } from '@/content/faq';
 
 const heroService = getService(885) ?? featuredServices[0];
+const lowestRate = Math.min(
+  ...catalog.services.filter((service) => service.pricing === 'per1000').map((service) => service.rate),
+);
 
 const whyFeatures = [
   {
@@ -70,7 +73,7 @@ const steps = [
   {
     icon: PackageCheck,
     title: '确认并交付',
-    body: '客服确认支付方式后开始排期。订单进度与售后都围绕订单号跟进。',
+    body: '按页面显示的 USDT-TRC20 地址转账，客服核对后开始排期。订单进度与售后都围绕订单号跟进。',
   },
 ];
 
@@ -144,7 +147,7 @@ function Hero() {
               style={{ animationDelay: '160ms' }}
             >
               从 Telegram 到 TikTok，{platforms.length} 个主流平台的社媒增长服务。
-              按千次明码标价，按需起量，一个购物车完成选购。
+              美元计价，USDT-TRC20 结算，按需起量。
             </p>
 
             <form
@@ -192,7 +195,7 @@ function Hero() {
             >
               <Stat value={catalog.total.toLocaleString('zh-CN')} label="在售服务" />
               <Stat value={String(platforms.length)} label="覆盖平台" />
-              <Stat value="¥0.009" label="千次起价" />
+              <Stat value={`$${formatRate(lowestRate)}`} label="千次起价" />
               <Stat value={String(catalog.types.length)} label="服务类型" />
             </div>
           </div>
@@ -209,7 +212,7 @@ function Hero() {
 
             <div className="absolute right-0 top-6 w-[330px] rotate-[2.5deg] rounded-[28px] bg-lime p-6 text-ink shadow-lift">
               <div className="flex items-center justify-between text-[9px] font-semibold tracking-[0.18em] text-ink/45 uppercase">
-                <span>Tide Index</span>
+                <span>AU Index</span>
                 <span>2026</span>
               </div>
               <p className="num mt-7 text-[62px] font-semibold leading-none tracking-[-0.06em]">
@@ -243,7 +246,7 @@ function Hero() {
                     {heroService.name}
                   </p>
                   <p className="mt-1 text-[10px] text-muted">
-                    ¥{formatRate(heroService.rate)} / 千次 · 起订 {heroService.min}
+                    ${formatRate(heroService.rate)} / 千次 · 起订 {heroService.min}
                   </p>
                 </div>
               </div>
@@ -303,7 +306,7 @@ function PlatformStrip() {
                 <PlatformBadge platform={platform.key} size={22} rounded="rounded-[7px]" />
                 <span className="font-medium">{platform.name}</span>
                 <span className="num text-[10px] text-muted/50 group-hover:text-muted">
-                  {minRate !== null ? `¥${formatRate(minRate)} 起` : `${platform.count} 项`}
+                  {minRate !== null ? `$${formatRate(minRate)} 起` : `${platform.count} 项`}
                 </span>
               </Link>
             );
@@ -359,7 +362,7 @@ function PlatformsSection() {
                     <p className="num mt-1 text-[11px] text-muted">{platform.count} 项服务</p>
                   </div>
                   <p className="mt-4 text-[10px] text-muted/70">
-                    {minRate !== null ? `¥${formatRate(minRate)} 起 / 千次` : '整包服务'}
+                    {minRate !== null ? `$${formatRate(minRate)} 起 / 千次` : '整包服务'}
                   </p>
                 </Link>
               </Reveal>
@@ -405,7 +408,7 @@ function WhySection() {
         <Reveal className="overflow-hidden rounded-[30px] border border-line bg-cream p-6 sm:p-10 lg:p-14">
           <div className="grid gap-12 lg:grid-cols-[.92fr_1.08fr]">
             <div className="self-start lg:sticky lg:top-28">
-              <p className="eyebrow">Why TideSMM</p>
+              <p className="eyebrow">Why AU9922</p>
               <h2 className="mt-4 font-display text-[34px] font-semibold leading-[1.16] tracking-[-0.02em] text-ink sm:text-[44px]">
                 把复杂的事，
                 <br />
@@ -483,7 +486,7 @@ function PricingSection() {
                 </div>
                 <div className="shrink-0 text-right">
                   <p className="num text-[13px] font-semibold text-ink">
-                    ¥{formatRate(service.rate)}
+                    ${formatRate(service.rate)}
                   </p>
                   <p className="text-[9px] text-muted">
                     /{service.pricing === 'fixed' ? '件' : '千次'}
@@ -526,7 +529,7 @@ function PricingSection() {
                       </p>
                     </td>
                     <td className="num px-4 py-4 text-[13px] font-semibold text-ink">
-                      ¥{formatRate(service.rate)}
+                      ${formatRate(service.rate)}
                       <span className="ml-1 text-[10px] font-normal text-muted">
                         /{service.pricing === 'fixed' ? '件' : '千次'}
                       </span>
@@ -552,7 +555,7 @@ function PricingSection() {
           <div className="flex flex-col gap-2 border-t border-line bg-paper/50 px-6 py-4 text-[11px] text-muted sm:flex-row sm:items-center sm:justify-between">
             <span className="flex items-center gap-2">
               <Sparkles size={13} className="text-ink" />
-              示例：1,000 次 × ¥{formatRate(heroService.rate)} / 千次 ={' '}
+              示例：1,000 次 × ${formatRate(heroService.rate)} / 千次 ={' '}
               {formatMoney(itemSubtotalCents(heroService, 1000))}
             </span>
             <span className="text-muted/60">以上为目录真实条目，最终金额以购物车为准</span>

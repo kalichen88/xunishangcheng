@@ -1,9 +1,9 @@
 {
-  "name": "tidesmm",
+  "name": "au9922",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "TideSMM — a modern social growth service storefront with a 3,959-item catalog and Cloudflare deployment.",
+  "description": "AU9922 — a modern social growth service storefront with a 3,959-item catalog and Cloudflare deployment.",
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/build-seo.mjs",

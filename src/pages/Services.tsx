@@ -123,7 +123,7 @@ export function Services() {
 
   usePageMeta(
     '全部服务',
-    '浏览 TideSMM 全部 3,959 项社媒增长服务，按平台、服务类型与价格筛选。',
+    '浏览 AU9922 全部 3,959 项社媒增长服务，按平台、服务类型与价格筛选。',
   );
 
   useEffect(() => {

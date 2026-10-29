@@ -39,7 +39,7 @@ const result = await page.evaluate(() => ({
   url: location.pathname,
   heading: document.querySelector('h1')?.textContent?.trim(),
   body: document.body.innerText.includes('已提交后台'),
-  orderId: document.body.innerText.match(/TS-\d{8}-[A-Z0-9]+/)?.[0],
+  orderId: document.body.innerText.match(/AU-\d{8}-[A-Z0-9]+/)?.[0],
 }));
 console.log('LIVE ORDER', result);
 console.log('ERRORS', errors);

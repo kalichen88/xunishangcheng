@@ -58,16 +58,16 @@ await page.setContent(`<!doctype html>
   <div class="left">
     <div class="brand">
       <div class="mark"><svg width="26" height="26" viewBox="0 0 64 64"><path d="M13 38.5c6.4 0 6.4-9 12.8-9s6.4 9 12.8 9 6.4-9 12.4-9" fill="none" stroke="#ddfc6d" stroke-width="4.6" stroke-linecap="round"/><path d="M13 48c6.4 0 6.4-5.2 12.8-5.2S32.2 48 38.6 48s6.4-5.2 12.4-5.2" fill="none" stroke="#ddfc6d" stroke-width="3.2" stroke-linecap="round" opacity=".55"/></svg></div>
-      <div><div class="brandname">TideSMM</div><div class="cn">潮汐增长</div></div>
+      <div><div class="brandname">AU9922</div><div class="cn">全球社媒增长</div></div>
     </div>
     <div class="tag">Social growth store · 2026</div>
     <h1>把流量，<br>做成<em>增长</em>。</h1>
-    <p class="sub">10 个主流平台，3,959 项明码标价的社媒增长服务。<br>按千次计费，按需起量，一个购物车完成选购。</p>
-    <div class="chips"><span class="chip">Telegram</span><span class="chip">Instagram</span><span class="chip">TikTok</span><span class="chip">YouTube</span><span class="chip">X / Twitter</span></div>
+    <p class="sub">10 个主流平台，3,959 项明码标价的社媒增长服务。<br>美元计价，USDT-TRC20 结算，按需起量。</p>
+    <div class="chips"><span class="chip">Telegram</span><span class="chip">Instagram</span><span class="chip">TikTok</span><span class="chip">YouTube</span><span class="chip">USDT-TRC20</span></div>
   </div>
   <div class="right">
     <div class="lime">
-      <div class="label"><span>Tide Index</span><span>2026</span></div>
+      <div class="label"><span>AU Index</span><span>2026</span></div>
       <div class="big">3,959</div>
       <p>项服务，随时可下单</p>
       <div class="bars"><span class="bar" style="height:38%"></span><span class="bar" style="height:52%"></span><span class="bar" style="height:45%"></span><span class="bar" style="height:64%"></span><span class="bar" style="height:57%"></span><span class="bar" style="height:74%"></span><span class="bar" style="height:66%"></span><span class="bar" style="height:88%"></span><span class="bar" style="height:79%"></span><span class="bar" style="height:98%"></span></div>
@@ -77,14 +77,14 @@ await page.setContent(`<!doctype html>
       <div class="top"><span>示例订单</span><span class="status">进行中</span></div>
       <div class="service">
         <div class="tg"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div>
-        <div><div class="sname">Telegram 成员 90天不掉落</div><div class="smeta">¥0.608 / 千次 · 起订 100</div></div>
+        <div><div class="sname">Telegram 成员 90天不掉落</div><div class="smeta">$0.08444 / 千次 · 起订 100</div></div>
       </div>
       <div class="progress"><div class="prow"><span>参考进度</span><span>68%</span></div><div class="track"><div class="fill"></div></div></div>
-      <div class="stats"><div class="stat"><b>100</b><span>起订</span></div><div class="stat"><b>¥0.06</b><span>小计</span></div><div class="stat"><b>59 分钟</b><span>参考时效</span></div></div>
+      <div class="stats"><div class="stat"><b>100</b><span>起订</span></div><div class="stat"><b>$0.01</b><span>小计</span></div><div class="stat"><b>59 分钟</b><span>参考时效</span></div></div>
     </div>
   </div>
 </div>
-<div class="foot">TIDESMM · SOCIAL GROWTH STORE</div>
+<div class="foot">AU9922 · SOCIAL GROWTH STORE</div>
 </body></html>`, { waitUntil: 'networkidle' });
 await page.evaluate(() => document.fonts.ready);
 await page.waitForTimeout(900);

@@ -88,7 +88,7 @@ export function ServiceDetail() {
   usePageMeta(
     service?.name,
     service
-      ? `${service.name}：${service.platformName} 社媒增长服务，¥${formatRate(service.rate)} / ${rateUnit(service)}，起订 ${service.min}。`
+      ? `${service.name}：${service.platformName} 社媒增长服务，$${formatRate(service.rate)} / ${rateUnit(service)}，起订 ${service.min}。`
       : undefined,
   );
 
@@ -165,7 +165,7 @@ export function ServiceDetail() {
               {service.name} 是面向 {service.platformName} 的{shortTypeName(service.type)}
               服务，当前目录参考价为{' '}
               <span className="font-medium text-ink">
-                ¥{formatRate(service.rate)} / {rateUnit(service)}
+                ${formatRate(service.rate)} / {rateUnit(service)}
               </span>
               。起订 {service.min} {unit}，单次最多 {service.max.toLocaleString('zh-CN')} {unit}，参考交付时间{' '}
               {deliveryLabel(service)}。下单时提供公开的目标链接或用户名即可，支付与排期由客服确认。
@@ -173,7 +173,7 @@ export function ServiceDetail() {
 
             <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {[
-                { label: '单价', value: `¥${formatRate(service.rate)}` },
+                { label: '单价', value: `$${formatRate(service.rate)}` },
                 { label: '起订', value: `${service.min} ${unit}` },
                 { label: '单次上限', value: service.max.toLocaleString('zh-CN') },
                 { label: '参考时效', value: deliveryLabel(service) },
@@ -195,7 +195,7 @@ export function ServiceDetail() {
                   ['服务类型', typeName(service.type)],
                   ['目录分类', service.category],
                   ['计费方式', pricingModeLabel(service)],
-                  ['单价', `¥${formatRate(service.rate)} / ${rateUnit(service)}`],
+                  ['单价', `$${formatRate(service.rate)} / ${rateUnit(service)}`],
                   ['起订 / 上限', `${service.min} – ${service.max} ${unit}`],
                   ['参考交付', deliveryLabel(service)],
                   ['服务编号', `#${service.id}`],
@@ -261,7 +261,7 @@ export function ServiceDetail() {
                   </p>
                   <p className="mt-1 flex items-baseline gap-1">
                     <span className="num text-[38px] font-semibold leading-none tracking-[-0.04em] text-ink">
-                      ¥{formatRate(service.rate)}
+                      ${formatRate(service.rate)}
                     </span>
                     <span className="text-[11px] text-muted">/ {rateUnit(service)}</span>
                   </p>
