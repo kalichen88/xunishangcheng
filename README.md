@@ -143,16 +143,30 @@ pnpm exec wrangler dev \
 
 `TELEGRAM_API_BASE` 仅用于测试，可指向本地 mock 服务；生产环境不要设置。
 
-## 自动部署（GitHub Actions）
+## 自动部署（Cloudflare Git 集成）
 
-工作流位于 [.github/workflows/deploy.yml](.github/workflows/deploy.yml)。推送到 `main` 后自动构建并部署。
+当前仓库已与 Cloudflare 完成 GitHub 授权。把代码推送到 `main` 后，Cloudflare 会按项目配置自动拉取、构建并部署。
 
-在 GitHub 仓库 Secrets 中配置：
+如果 Cloudflare 项目使用 **Workers Builds**：
 
-- `CLOUDFLARE_API_TOKEN`：在 Cloudflare Dashboard → My Profile → API Tokens 创建，权限至少包含 `Workers Scripts:Edit`、`Workers Routes:Edit`、`Account Settings:Read`。
-- `CLOUDFLARE_ACCOUNT_ID`：Cloudflare Dashboard 右侧的 Account ID。
+- Build command：`pnpm build`
+- Deploy command：`pnpm exec wrangler deploy`
+- Root directory：仓库根目录
+- D1 绑定沿用 [wrangler.jsonc](wrangler.jsonc) 中的配置
 
-Telegram 与 ADMIN_TOKEN 不需要放进 GitHub：它们是 Worker 的运行期 Secret，配置一次后持续生效。D1 绑定写在 `wrangler.jsonc` 中，GitHub Actions 会沿用同一个数据库。
+如果项目使用 **Pages**：
+
+- Build command：`pnpm build`
+- Build output directory：`dist`
+- Pages 不包含本项目的 Worker API；订单会回退到「本机订单模式」。需要完整订单后台时，请使用 Workers 或把 `/api/*` 单独部署为 Worker。
+
+本地手动部署仍然可以：
+
+```bash
+pnpm deploy
+```
+
+Telegram 与 ADMIN_TOKEN 是 Worker 的运行期 Secret，不进入 GitHub；在 Cloudflare Dashboard 或 `wrangler secret put` 配置一次后持续生效。
 
 ## 目录结构
 
@@ -176,7 +190,7 @@ Telegram 与 ADMIN_TOKEN 不需要放进 GitHub：它们是 Worker 的运行期 
 │  ├─ build-og.mjs      # Open Graph 图片
 │  └─ qa.mjs            # Playwright 全流程验收
 ├─ wrangler.jsonc
-└─ .github/workflows/deploy.yml
+└─ package.json
 ```
 
 ## 商品目录
