@@ -1,0 +1,41 @@
+{
+  "name": "tidesmm",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "TideSMM — a modern social growth service storefront with a 3,959-item catalog and Cloudflare deployment.",
+  "scripts": {
+    "dev": "vite",
+    "prebuild": "node scripts/build-seo.mjs",
+    "build": "tsc -b && vite build",
+    "check": "tsc -b --force && tsc -p tsconfig.worker.json --noEmit",
+    "preview": "vite preview",
+    "catalog": "node scripts/build-catalog.mjs",
+    "seo": "node scripts/build-seo.mjs",
+    "og": "node scripts/build-og.mjs",
+    "deploy": "pnpm build && wrangler deploy",
+    "deploy:dry": "pnpm build && wrangler deploy --dry-run",
+    "cf:dev": "pnpm build && wrangler dev",
+    "qa": "node scripts/qa.mjs"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.63.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261028.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "playwright-core": "^1.64.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "wrangler": "^4.154.0"
+  }
+}

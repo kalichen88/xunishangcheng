@@ -1,0 +1,6 @@
+# Copy to .dev.vars for local `wrangler dev` order-notification testing.
+# Never commit the real values.
+TELEGRAM_BOT_TOKEN=replace-with-bot-token
+TELEGRAM_CHAT_ID=replace-with-chat-id
+# Optional: point at a local mock Telegram API during tests.
+# TELEGRAM_API_BASE=http://127.0.0.1:9099

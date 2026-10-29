@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /orders
+Disallow: /order/
+
+Sitemap: https://tidesmm.workers.dev/sitemap.xml

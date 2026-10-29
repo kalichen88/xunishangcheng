@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.wrangler/
+.dev.vars
+research/
+*.local
+*.log
+.DS_Store
