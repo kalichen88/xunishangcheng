@@ -159,8 +159,8 @@ export function Cart() {
                 <dd className="num text-ink">{formatMoney(subtotalCents)}</dd>
               </div>
               <div className="flex items-center justify-between">
-                <dt className="text-muted">支付手续费</dt>
-                <dd className="text-[10px] text-muted">以渠道实际收取为准</dd>
+                <dt className="text-muted">网络手续费</dt>
+                <dd className="text-[10px] text-muted">由付款方承担（TRC20）</dd>
               </div>
             </dl>
             <div className="mt-4 flex items-end justify-between border-t border-line pt-4">
@@ -179,7 +179,7 @@ export function Cart() {
             </button>
             <p className="mt-3 flex items-start gap-1.5 text-[10px] leading-relaxed text-muted/70">
               <ShieldCheck size={12} className="mt-0.5 shrink-0" />
-              提交后由客服确认支付方式与目标链接，不会直接扣款。
+              提交后请按页面显示的 USDT-TRC20 地址转账，客服核对到账后开始排期。
             </p>
           </div>
 

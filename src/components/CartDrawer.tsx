@@ -144,7 +144,7 @@ export function CartDrawer() {
                 </span>
               </div>
               <p className="mt-0.5 text-right text-[10px] text-muted/70">
-                不含支付渠道可能产生的手续费
+                不含链上转账可能产生的手续费
               </p>
               <button
                 type="button"

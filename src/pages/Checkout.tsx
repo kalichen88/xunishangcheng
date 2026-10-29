@@ -182,7 +182,7 @@ export function Checkout() {
               </span>
               <div>
                 <h2 className="text-[15px] font-semibold text-ink">联系方式</h2>
-                <p className="text-[10.5px] text-muted">客服会通过这里确认支付与交付。</p>
+                <p className="text-[10.5px] text-muted">客服会通过这里核对到账与交付。</p>
               </div>
             </div>
 
@@ -379,7 +379,7 @@ export function Checkout() {
               {channel === 'telegram'
                 ? '订单会实时发送给客服，请留意你的联系方式。'
                 : channel === 'database'
-                  ? '订单会提交到客服后台，请等待确认支付与交付细节。'
+                  ? '订单会提交到客服后台，请等待客服核对到账与交付细节。'
                   : channel === 'none'
                     ? '当前为本机订单模式：提交后请复制订单信息，通过客服渠道发送。'
                     : '正在检测订单通知通道…'}

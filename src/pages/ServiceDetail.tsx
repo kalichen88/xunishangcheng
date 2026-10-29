@@ -168,7 +168,7 @@ export function ServiceDetail() {
                 ${formatRate(service.rate)} / {rateUnit(service)}
               </span>
               。起订 {service.min} {unit}，单次最多 {service.max.toLocaleString('zh-CN')} {unit}，参考交付时间{' '}
-              {deliveryLabel(service)}。下单时提供公开的目标链接或用户名即可，支付与排期由客服确认。
+              {deliveryLabel(service)}。下单时提供公开的目标链接或用户名即可，USDT 到账与排期由客服确认。
             </p>
 
             <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -364,7 +364,7 @@ export function ServiceDetail() {
               </button>
 
               <div className="mt-3 flex items-center justify-center gap-1.5 text-[9.5px] text-muted/65">
-                <Lock size={10} /> 不需要账号密码 · 支付与排期由客服确认
+                <Lock size={10} /> 不需要账号密码 · USDT 到账后开始排期
               </div>
             </div>
 
@@ -373,7 +373,7 @@ export function ServiceDetail() {
                 <Info size={11} /> 下单流程
               </p>
               <p className="mt-1.5 text-[10.5px] leading-relaxed text-muted">
-                提交订单后，客服会通过你留下的联系方式确认支付方式和目标链接。确认完成后开始排期。
+                提交订单后，请按页面显示的 USDT-TRC20 地址转账，并把 TxID 发给客服；客服核对到账与目标链接后开始排期。
               </p>
             </div>
           </aside>

@@ -63,15 +63,15 @@ export function OrderDetail() {
       title: '等待客服确认',
       body:
         order.channel === 'telegram'
-          ? '订单详情已发送至客服通知通道，客服会通过你留下的联系方式确认支付与目标链接。'
+          ? '订单详情已发送至客服通知通道，客服会通过你留下的联系方式核对到账与目标链接。'
           : order.channel === 'database'
-            ? '订单已提交到客服后台，客服会通过你留下的联系方式确认支付与目标链接。'
+            ? '订单已提交到客服后台，客服会通过你留下的联系方式核对到账与目标链接。'
             : '订单尚未发送给客服。请复制订单信息，通过 Telegram 发送，等待客服确认。',
       state: 'current',
     },
     {
       title: '开始交付',
-      body: '支付与目标链接确认后进入处理队列，实际进度受平台风控与队列影响。',
+      body: 'USDT 到账与目标链接确认后进入处理队列，实际进度受平台风控与队列影响。',
       state: 'todo',
     },
     {
@@ -117,8 +117,8 @@ export function OrderDetail() {
               </h1>
               <p className="mt-2 text-[12px] text-cream/50">
                 {order.channel === 'local'
-                  ? '请把订单信息发送给客服，确认支付后开始交付。'
-                  : '客服会尽快联系你确认支付与交付细节。'}
+                  ? '请把订单信息发送给客服，确认到账后开始交付。'
+                  : '客服会尽快联系你核对到账与交付细节。'}
               </p>
             </div>
             <div className="text-left sm:text-right">
@@ -139,7 +139,7 @@ export function OrderDetail() {
                 <div>
                   <p className="text-[11px] font-semibold text-ink">这笔订单还没有发送给客服</p>
                   <p className="mt-0.5 text-[10.5px] leading-relaxed text-muted">
-                    点击右侧「复制订单信息」，通过 Telegram 发送给客服，确认支付后开始排期。
+                    点击右侧「复制订单信息」，通过 Telegram 发送给客服，确认到账后开始排期。
                   </p>
                 </div>
               </div>

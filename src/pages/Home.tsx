@@ -579,7 +579,7 @@ function StepsSection() {
               下单一项增长服务
             </>
           }
-          description="不需要注册复杂账号，也不需要研究后台。选服务、填链接、确认支付，三步完成。"
+          description="不需要注册复杂账号，也不需要研究后台。选服务、填链接、完成 USDT 转账，三步完成。"
         />
         <div className="mt-10 grid gap-3 md:grid-cols-3">
           {steps.map((step, index) => (
