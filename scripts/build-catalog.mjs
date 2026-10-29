@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const CNY_PER_USD = Number(process.env.CNY_PER_USD ?? 7.2);
+const CNY_PER_USD = Number(process.env.CNY_PER_USD ?? 7);
 if (!Number.isFinite(CNY_PER_USD) || CNY_PER_USD <= 0) {
   throw new Error('CNY_PER_USD must be a positive number');
 }
