@@ -1,6 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import catalog from '../src/data/catalog.json' with { type: 'json' };
+
+const catalog = JSON.parse(
+  fs.readFileSync(new URL('../src/data/catalog.json', import.meta.url), 'utf8'),
+);
 
 const base = (process.env.SITE_URL ?? 'https://tidesmm.kalichen80.workers.dev').replace(/\/+$/, '');
 const pages = ['/', '/services', '/faq', '/terms', '/privacy'];
