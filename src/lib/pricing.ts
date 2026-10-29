@@ -30,8 +30,9 @@ export function itemSubtotalCents(service: Service, quantity: number): number {
 }
 
 export function formatRate(rate: number): string {
+  const maximumFractionDigits = rate >= 1 ? 2 : rate >= 0.01 ? 4 : 5;
   return new Intl.NumberFormat('zh-CN', {
-    maximumFractionDigits: 5,
+    maximumFractionDigits,
     minimumFractionDigits: 0,
   }).format(rate);
 }

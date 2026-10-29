@@ -77,7 +77,7 @@ await page.setContent(`<!doctype html>
       <div class="top"><span>示例订单</span><span class="status">进行中</span></div>
       <div class="service">
         <div class="tg"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div>
-        <div><div class="sname">Telegram 成员 90天不掉落</div><div class="smeta">$0.08444 / 千次 · 起订 100</div></div>
+        <div><div class="sname">Telegram 成员 90天不掉落</div><div class="smeta">$0.0844 / 千次 · 起订 100</div></div>
       </div>
       <div class="progress"><div class="prow"><span>参考进度</span><span>68%</span></div><div class="track"><div class="fill"></div></div></div>
       <div class="stats"><div class="stat"><b>100</b><span>起订</span></div><div class="stat"><b>$0.01</b><span>小计</span></div><div class="stat"><b>59 分钟</b><span>参考时效</span></div></div>
