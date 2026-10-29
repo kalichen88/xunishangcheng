@@ -13,7 +13,7 @@ import {
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { PlatformBadge } from '@/components/PlatformIcon';
 import { useToast } from '@/components/Toast';
-import { copyText, getOrder, orderText } from '@/lib/orders';
+import { copyText, getOrder, orderChannelLabel, orderText } from '@/lib/orders';
 import type { Order } from '@/lib/orders';
 import { formatMoney, formatRate } from '@/lib/pricing';
 import { paymentLabel, site } from '@/config';
@@ -37,7 +37,7 @@ export function OrderDetail() {
           </span>
           <h1 className="mt-5 font-display text-[34px] font-semibold text-ink">找不到这笔订单</h1>
           <p className="mt-3 text-[13px] leading-relaxed text-muted">
-            订单记录保存在创建它的浏览器中。如果你更换了设备、清除了浏览数据，或通过其他浏览器打开，本机记录可能不存在。
+            这个浏览器中没有这笔订单的本机记录。如果订单已经提交到后台，可以凭订单号联系客服查询；如果更换了设备或清除了浏览数据，也会出现这种情况。
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
             <Link to="/orders" className="btn btn-dark">
@@ -53,7 +53,7 @@ export function OrderDetail() {
   }
 
   const createdAt = new Date(order.createdAt);
-  const channelLabel = order.channel === 'telegram' ? '已通知客服' : '本机保存';
+  const channelLabel = orderChannelLabel(order.channel);
   const steps = [
     {
       title: '订单已生成',
@@ -65,7 +65,9 @@ export function OrderDetail() {
       body:
         order.channel === 'telegram'
           ? '订单详情已发送至客服通知通道，客服会通过你留下的联系方式确认支付与目标链接。'
-          : '订单尚未发送给客服。请复制订单信息，通过 Telegram 或邮件发送，等待客服确认。',
+          : order.channel === 'database'
+            ? '订单已提交到客服后台，客服会通过你留下的联系方式确认支付与目标链接。'
+            : '订单尚未发送给客服。请复制订单信息，通过 Telegram 或邮件发送，等待客服确认。',
       state: 'current',
     },
     {
@@ -104,12 +106,12 @@ export function OrderDetail() {
                 {channelLabel}
               </span>
               <h1 className="mt-4 font-display text-[34px] font-semibold leading-tight tracking-[-0.02em] sm:text-[42px]">
-                {order.channel === 'telegram' ? '订单已提交。' : '订单已生成。'}
+                {order.channel === 'local' ? '订单已生成。' : '订单已提交。'}
               </h1>
               <p className="mt-2 text-[12px] text-cream/50">
-                {order.channel === 'telegram'
-                  ? '客服会尽快联系你确认支付与交付细节。'
-                  : '请把订单信息发送给客服，确认支付后开始交付。'}
+                {order.channel === 'local'
+                  ? '请把订单信息发送给客服，确认支付后开始交付。'
+                  : '客服会尽快联系你确认支付与交付细节。'}
               </p>
             </div>
             <div className="text-left sm:text-right">
@@ -287,7 +289,9 @@ export function OrderDetail() {
               <p className="mt-1.5 text-[10px] leading-relaxed text-muted">
                 {order.channel === 'telegram'
                   ? '订单已通知客服，同时在本机保留了一份记录。'
-                  : '订单目前只保存在此浏览器。清除浏览数据会移除记录。'}
+                  : order.channel === 'database'
+                    ? '订单已提交到客服后台，同时在本机保留了一份记录。'
+                    : '订单目前只保存在此浏览器。清除浏览数据会移除记录。'}
               </p>
               <Link
                 to="/orders"

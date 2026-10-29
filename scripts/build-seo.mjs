@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import catalog from '../src/data/catalog.json' with { type: 'json' };
 
-const base = (process.env.SITE_URL ?? 'https://tidesmm.workers.dev').replace(/\/+$/, '');
+const base = (process.env.SITE_URL ?? 'https://tidesmm.kalichen80.workers.dev').replace(/\/+$/, '');
 const pages = ['/', '/services', '/faq', '/terms', '/privacy'];
 const urls = [
   ...pages.map((page) => ({ loc: `${base}${page === '/' ? '/' : page}`, priority: page === '/' ? '1.0' : '0.6' })),
@@ -32,6 +32,7 @@ Allow: /
 Disallow: /checkout
 Disallow: /orders
 Disallow: /order/
+Disallow: /admin
 
 Sitemap: ${base}/sitemap.xml
 `;

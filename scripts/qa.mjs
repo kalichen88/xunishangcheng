@@ -56,7 +56,7 @@ const desktop = await browser.newPage({
 });
 await attach(desktop, 'desktop');
 
-await desktop.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+await desktop.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
 await desktop.evaluate(() => document.fonts.ready);
 await desktop.waitForTimeout(800);
 await desktop.screenshot({ path: path.join(OUT, 'home-viewport.png') });
@@ -73,7 +73,7 @@ const homeStats = await desktop.evaluate(() => ({
 }));
 console.log('HOME', homeStats);
 
-await desktop.goto(`${BASE}/services`, { waitUntil: 'networkidle' });
+await desktop.goto(`${BASE}/services`, { waitUntil: 'domcontentloaded' });
 await desktop.waitForTimeout(700);
 await desktop.screenshot({ path: path.join(OUT, 'services-desktop.png'), fullPage: false });
 
@@ -89,7 +89,7 @@ console.log('SERVICES', servicesState);
 await desktop.screenshot({ path: path.join(OUT, 'services-telegram.png'), fullPage: false });
 
 // Search from a clean catalog state
-await desktop.goto(`${BASE}/services`, { waitUntil: 'networkidle' });
+await desktop.goto(`${BASE}/services`, { waitUntil: 'domcontentloaded' });
 await desktop.getByRole('textbox', { name: '搜索服务' }).fill('Instagram 关注');
 await desktop.keyboard.press('Enter');
 await desktop.waitForTimeout(700);
@@ -103,7 +103,7 @@ if (!searchState.cards) issues.push('search returned no cards for Instagram 关�
 await desktop.screenshot({ path: path.join(OUT, 'services-search.png'), fullPage: false });
 
 // Detail page
-await desktop.goto(`${BASE}/service/885`, { waitUntil: 'networkidle' });
+await desktop.goto(`${BASE}/service/885`, { waitUntil: 'domcontentloaded' });
 await desktop.waitForTimeout(500);
 await desktop.screenshot({ path: path.join(OUT, 'detail-desktop.png'), fullPage: false });
 const detailState = await desktop.evaluate(() => ({
@@ -152,18 +152,18 @@ console.log('ORDER', orderState);
 if (!orderState.orders) issues.push('order was not saved to localStorage');
 if (orderState.cart !== 0) issues.push('cart was not cleared after order');
 
-await desktop.goto(`${BASE}/orders`, { waitUntil: 'networkidle' });
+await desktop.goto(`${BASE}/orders`, { waitUntil: 'domcontentloaded' });
 await fullPageShot(desktop, 'orders-desktop.png');
 
 // Search dialog
-await desktop.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+await desktop.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
 await desktop.keyboard.press('Control+k');
 await desktop.waitForTimeout(400);
 await desktop.screenshot({ path: path.join(OUT, 'search-dialog.png'), fullPage: false });
 await desktop.keyboard.press('Escape');
 
 // FAQ
-await desktop.goto(`${BASE}/faq`, { waitUntil: 'networkidle' });
+await desktop.goto(`${BASE}/faq`, { waitUntil: 'domcontentloaded' });
 await desktop.waitForTimeout(400);
 await desktop.screenshot({ path: path.join(OUT, 'faq-desktop.png'), fullPage: false });
 
@@ -175,7 +175,7 @@ const mobile = await browser.newPage({
   hasTouch: true,
 });
 await attach(mobile, 'mobile');
-await mobile.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+await mobile.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
 await mobile.evaluate(() => document.fonts.ready);
 await mobile.waitForTimeout(700);
 await revealAll(mobile);
@@ -189,15 +189,15 @@ await mobile.evaluate(() => window.scrollTo(0, document.body.scrollHeight - 1200
 await mobile.waitForTimeout(300);
 await mobile.screenshot({ path: path.join(OUT, 'home-mobile-bottom.png') });
 
-await mobile.goto(`${BASE}/services`, { waitUntil: 'networkidle' });
+await mobile.goto(`${BASE}/services`, { waitUntil: 'domcontentloaded' });
 await mobile.waitForTimeout(600);
 await mobile.screenshot({ path: path.join(OUT, 'services-mobile.png'), fullPage: false });
-await mobile.goto(`${BASE}/service/885`, { waitUntil: 'networkidle' });
+await mobile.goto(`${BASE}/service/885`, { waitUntil: 'domcontentloaded' });
 await mobile.waitForTimeout(500);
 await mobile.screenshot({ path: path.join(OUT, 'detail-mobile.png'), fullPage: false });
 
 // Mobile checkout with an item
-await mobile.goto(`${BASE}/service/885`, { waitUntil: 'networkidle' });
+await mobile.goto(`${BASE}/service/885`, { waitUntil: 'domcontentloaded' });
 await mobile.getByRole('button', { name: '加购', exact: true }).click();
 await mobile.waitForTimeout(400);
 await mobile.getByRole('dialog').getByRole('button', { name: '去结算' }).click();

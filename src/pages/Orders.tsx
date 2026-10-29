@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Inbox, RefreshCw, Send } from 'lucide-react';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { PlatformBadge } from '@/components/PlatformIcon';
-import { readOrders } from '@/lib/orders';
+import { orderChannelLabel, readOrders } from '@/lib/orders';
 import type { Order } from '@/lib/orders';
 import { formatMoney } from '@/lib/pricing';
 import { paymentLabel } from '@/config';
@@ -71,10 +71,12 @@ export function Orders() {
                     className={`rounded-full px-2 py-0.5 text-[9px] font-medium ${
                       order.channel === 'telegram'
                         ? 'bg-mint/10 text-mint'
-                        : 'bg-ink/[0.06] text-muted'
+                        : order.channel === 'database'
+                          ? 'bg-violet/10 text-violet'
+                          : 'bg-ink/[0.06] text-muted'
                     }`}
                   >
-                    {order.channel === 'telegram' ? '已通知客服' : '本机保存'}
+                    {orderChannelLabel(order.channel)}
                   </span>
                 </div>
                 <span className="text-[10px] text-muted">

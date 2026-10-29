@@ -27,7 +27,7 @@ export interface OrderLine {
 export interface Order {
   id: string;
   createdAt: string;
-  channel: 'local' | 'telegram';
+  channel: 'local' | 'telegram' | 'database';
   status: 'pending';
   customer: CustomerInfo;
   items: OrderLine[];
@@ -111,6 +111,17 @@ export function orderText(order: Order): string {
   lines.push('', `合计：¥${(order.totalCents / 100).toFixed(2)}`);
   if (order.customer.note) lines.push(`备注：${order.customer.note}`);
   return lines.join('\n');
+}
+
+export function orderChannelLabel(channel: Order['channel']): string {
+  switch (channel) {
+    case 'telegram':
+      return '已通知客服';
+    case 'database':
+      return '已提交后台';
+    default:
+      return '本机保存';
+  }
 }
 
 export function orderStatusLabel(status: Order['status']): string {

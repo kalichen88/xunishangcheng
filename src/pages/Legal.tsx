@@ -94,8 +94,8 @@ const privacy: Section[] = [
   {
     title: '3. 存储方式',
     paragraphs: [
-      '订单记录保存在你当前浏览器的 localStorage 中，方便你在本机查看。清除浏览器数据会移除这些记录。',
-      '如果站点启用了客服通知通道，订单详情会通过 Cloudflare Worker 发送至运营方的 Telegram，用于跟进订单。当前版本不设独立的订单数据库。',
+      '提交订单后，订单信息会写入 Cloudflare D1 数据库，用于客服确认、交付与售后。订单记录也会在你当前浏览器的 localStorage 中保留一份，方便你在本机查看；清除浏览器数据会移除本机记录。',
+      '如果站点启用了客服通知通道，订单详情还会通过 Cloudflare Worker 发送至运营方的 Telegram，用于及时跟进订单。',
     ],
   },
   {

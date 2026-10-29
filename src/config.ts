@@ -4,7 +4,7 @@ export const site = {
   tagline: '全球社媒增长服务商城',
   description:
     '覆盖 Telegram、Instagram、TikTok、YouTube、X、Facebook 等 10 个平台的社媒增长服务。3,959 项服务明码标价，按需起量。',
-  url: 'https://tidesmm.workers.dev',
+  url: 'https://tidesmm.kalichen80.workers.dev',
   email: 'hello@tidesmm.com',
   telegram: 'https://t.me/tidesmm',
   telegramHandle: '@tidesmm',

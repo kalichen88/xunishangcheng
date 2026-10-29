@@ -1,5 +1,7 @@
 # TideSMM 潮汐增长
 
+线上地址：<https://tidesmm.kalichen80.workers.dev>
+
 一个面向中文用户的社交媒体增长服务商城。以 [smm-x.com](https://smm-x.com/) 的公开服务目录为对标基准，重新设计了品牌、界面、文案与代码；当前上架 **3,959 项服务、10 个平台、8 类服务场景**，价格、起订量和参考时效均来自对标站点的公开价格表快照（2026-10-29）。
 
 站点同时提供中文商城体验与 Cloudflare Workers 部署配置。前端是 React SPA，Worker 负责静态资源、API 健康检查与订单通知。
@@ -12,11 +14,13 @@
 - **商品详情与价格计算**：按千次 / 整包两种计价方式，自动校验起订量与上限。
 - **购物车**：本地持久化、数量调整、目标链接填写、金额实时计算。
 - **结算流程**：联系方式、支付方式、备注、服务条款确认；订单编号与进度页。
-- **订单记录**：浏览器本地保存，支持重新复制订单信息、邮件发送、联系客服。
+- **订单记录**：订单写入 Cloudflare D1，同时在本机保留一份；支持重新复制订单信息、邮件发送、联系客服。
+- **订单后台**：`/admin` 输入 `ADMIN_TOKEN` 可查看订单、联系方式、服务明细与 Telegram 通知状态。
 - **搜索**：全站快捷搜索（`Ctrl/⌘ + K` 或 `/`），键盘上下选择。
 - **响应式设计**：桌面、平板、手机；支持减少动态效果的系统偏好。
-- **Cloudflare Worker**：静态资源 + `/api/health` + `/api/orders`。
-- **Telegram 订单通知**（可选）：配置 Bot 后，新订单会实时发送给客服。
+- **Cloudflare Worker**：静态资源 + `/api/health` + `/api/orders` + `/api/admin/orders`。
+- **D1 订单库**：订单持久化到 Cloudflare D1，刷新、换设备也能在后台查看（客户侧仍保留本机记录）。
+- **Telegram 订单通知**（可选）：配置 Bot 后，新订单会实时发送给客服；未配置时订单仍会入库。
 - **SEO**：标题、描述、Open Graph、JSON-LD、自动生成 sitemap（3,964 个 URL）。
 - **安全**：不收集账号密码或验证码；Worker 为所有响应添加安全头。
 
@@ -47,7 +51,13 @@ pnpm build
 pnpm exec wrangler dev
 ```
 
-打开 <http://127.0.0.1:8787>。此时 `/api/orders` 会返回 503，前端自动回退到「本机订单模式」。
+打开 <http://127.0.0.1:8787>。本地 Worker 已绑定 D1；如需本地测试订单入库，先执行一次：
+
+```bash
+pnpm exec wrangler d1 execute tidesmm-orders --local --file=worker/schema.sql
+```
+
+未配置 Telegram 时，`/api/orders` 仍会把订单写入 D1，前端显示「已提交后台」。
 
 ## 部署到 Cloudflare
 
@@ -70,17 +80,47 @@ export CLOUDFLARE_ACCOUNT_ID=...
 pnpm deploy
 ```
 
-这会执行 `pnpm build`（含 SEO 生成），然后运行 `wrangler deploy`。部署成功后 Wrangler 会输出类似：
+这会执行 `pnpm build`（含 SEO 生成），然后运行 `wrangler deploy`。当前线上地址：
 
 ```text
-https://tidesmm.<your-subdomain>.workers.dev
+https://tidesmm.kalichen80.workers.dev
 ```
 
 项目名在 [wrangler.jsonc](wrangler.jsonc) 的 `name` 字段。若名称被占用，改成自己的项目名即可；自定义域名可在 Cloudflare Dashboard → Workers → 对应 Worker → Settings → Domains & Routes 绑定。
 
-### 3. 可选：开启 Telegram 订单通知
+### 3. 订单数据库
 
-未配置时，订单保存在客户浏览器，结算页会明确提示「本机订单模式」。配置后，订单会实时发送到你的 Telegram：
+当前项目已在 Cloudflare 创建 D1 数据库 `tidesmm-orders`，并写入 [wrangler.jsonc](wrangler.jsonc) 的绑定。首次部署前对远程库执行一次建表：
+
+```bash
+pnpm exec wrangler d1 execute tidesmm-orders --remote --file=worker/schema.sql
+```
+
+如果把这个项目复制到另一个 Cloudflare 账号：
+
+```bash
+pnpm exec wrangler d1 create tidesmm-orders
+# 把输出的 database_id 写入 wrangler.jsonc 的 d1_databases
+pnpm exec wrangler d1 execute tidesmm-orders --remote --file=worker/schema.sql
+```
+
+### 4. 设置订单后台令牌
+
+```bash
+pnpm exec wrangler secret put ADMIN_TOKEN
+```
+
+输入一个足够长的随机字符串。之后访问：
+
+```text
+https://<your-worker-domain>/admin
+```
+
+输入同一个令牌即可查看订单、联系方式、服务明细与 Telegram 通知状态。令牌只保存在浏览器当前标签页的 `sessionStorage`，页面不会被搜索引擎索引。
+
+### 5. 可选：开启 Telegram 订单通知
+
+未配置时，订单仍会写入 D1，结算页显示「已提交后台」；配置后会额外推送一条消息到 Telegram：
 
 1. 在 Telegram 找 `@BotFather` 创建机器人，拿到 Bot Token。
 2. 给机器人发送一条消息，然后访问 `https://api.telegram.org/bot<token>/getUpdates` 找到 `chat.id`（也可以把机器人拉进群，使用群 ID）。
@@ -112,14 +152,14 @@ pnpm exec wrangler dev \
 - `CLOUDFLARE_API_TOKEN`：在 Cloudflare Dashboard → My Profile → API Tokens 创建，权限至少包含 `Workers Scripts:Edit`、`Workers Routes:Edit`、`Account Settings:Read`。
 - `CLOUDFLARE_ACCOUNT_ID`：Cloudflare Dashboard 右侧的 Account ID。
 
-Telegram 的两个 Secret 不需要放进 GitHub：它们是 Worker 的运行期 Secret，配置一次后持续生效。
+Telegram 与 ADMIN_TOKEN 不需要放进 GitHub：它们是 Worker 的运行期 Secret，配置一次后持续生效。D1 绑定写在 `wrangler.jsonc` 中，GitHub Actions 会沿用同一个数据库。
 
 ## 目录结构
 
 ```text
 .
 ├─ src/
-│  ├─ pages/            # 首页、目录、详情、购物车、结算、订单、FAQ、法律页
+│  ├─ pages/            # 首页、目录、详情、购物车、结算、订单、后台、FAQ、法律页
 │  ├─ components/       # 布局、导航、商品卡、购物车抽屉、搜索、Toast
 │  ├─ lib/              # 目录索引、价格计算、本地订单、API 客户端
 │  ├─ content/          # FAQ 文案
@@ -128,7 +168,8 @@ Telegram 的两个 Secret 不需要放进 GitHub：它们是 Worker 的运行期
 ├─ data/
 │  └─ catalog.source.json # 公开价格表快照（3,959 项，已剔除补差价条目）
 ├─ worker/
-│  └─ index.ts          # Worker：静态资源、健康检查、订单通知
+│  ├─ index.ts          # Worker：静态资源、订单、后台、通知
+│  └─ schema.sql        # D1 订单表
 ├─ scripts/
 │  ├─ build-catalog.mjs # 快照 → 商城目录
 │  ├─ build-seo.mjs     # sitemap.xml + robots.txt
@@ -159,7 +200,8 @@ pnpm catalog
 
 - [ ] 替换 `src/config.ts` 中的品牌名、邮箱与 Telegram 客服地址。
 - [ ] 修改 `wrangler.jsonc` 的 `name`，并更新 `index.html`、`scripts/build-seo.mjs` 中的站点 URL（或构建时设置 `SITE_URL`）。
-- [ ] 配置 Telegram Bot，或明确保留「本机订单模式」。
+- [ ] 配置 Telegram Bot（推荐），并设置 `ADMIN_TOKEN`。
+- [ ] 确认 D1 远程表已创建，且 `/admin` 能登录查看订单。
 - [ ] 确认支付方式与收款账户；当前版本不直接处理在线支付。
 - [ ] 让专业人士审核 `服务条款`、`隐私政策`，补充经营主体信息。
 - [ ] 确认商品目录、价格与目标平台规则的合规性。
@@ -168,11 +210,11 @@ pnpm catalog
 
 ## 当前边界
 
-首版聚焦「目录 + 购物车 + 订单请求」：
+首版聚焦「目录 + 购物车 + 订单请求 + 后台查看」：
 
 - 未接入在线支付、会员登录、余额系统与自助 API；
-- 未配置 Telegram 时，订单只保存在客户浏览器，需要客户复制订单信息发送给客服；
-- 订单通知通道成功时，订单会发送到 Telegram，但不会写入数据库；请自行做好客服侧归档；
+- 订单会写入 Cloudflare D1；未配置 Telegram 时不会主动推送，需要店主在 `/admin` 查看并跟进；
+- 客户侧订单记录仍保存在浏览器，作为快捷入口；后台以 D1 数据为准；
 - 商品价格来自快照，实际结算前由客服确认。
 
 这些边界都已在页面文案中明确说明，避免让客户误以为订单已经自动支付或自动进入交付。

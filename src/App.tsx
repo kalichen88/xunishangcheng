@@ -9,6 +9,7 @@ import { Cart } from '@/pages/Cart';
 import { Checkout } from '@/pages/Checkout';
 import { OrderDetail } from '@/pages/OrderDetail';
 import { Orders } from '@/pages/Orders';
+import { Admin } from '@/pages/Admin';
 import { Faq } from '@/pages/Faq';
 import { Legal } from '@/pages/Legal';
 import { NotFound } from '@/pages/NotFound';
@@ -27,6 +28,7 @@ export function App() {
               <Route path="checkout" element={<Checkout />} />
               <Route path="order/:id" element={<OrderDetail />} />
               <Route path="orders" element={<Orders />} />
+              <Route path="admin" element={<Admin />} />
               <Route path="faq" element={<Faq />} />
               <Route path="terms" element={<Legal kind="terms" />} />
               <Route path="privacy" element={<Legal kind="privacy" />} />

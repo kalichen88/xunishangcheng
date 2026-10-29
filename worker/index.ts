@@ -16,9 +16,11 @@ interface CatalogJson {
 
 interface Env {
   ASSETS: Fetcher;
+  DB?: D1Database;
   TELEGRAM_BOT_TOKEN?: string;
   TELEGRAM_CHAT_ID?: string;
   TELEGRAM_API_BASE?: string;
+  ADMIN_TOKEN?: string;
 }
 
 interface IncomingItem {
@@ -37,6 +39,8 @@ interface IncomingOrder {
   };
   items: IncomingItem[];
 }
+
+type OrderChannel = 'telegram' | 'database' | 'none';
 
 const SERVICES = new Map<number, ServiceRecord>(
   (rawCatalog as unknown as CatalogJson).services.map((service) => [service.id, service]),
@@ -147,6 +151,25 @@ function parseOrder(raw: unknown): { ok: true; order: IncomingOrder } | { ok: fa
   };
 }
 
+function itemSnapshots(order: IncomingOrder) {
+  return order.items.flatMap((item) => {
+    const service = SERVICES.get(item.id);
+    if (!service) return [];
+    return [
+      {
+        serviceId: service.id,
+        name: service.name,
+        platform: service.platformName,
+        quantity: item.quantity,
+        target: item.target,
+        rate: service.rate,
+        pricing: service.pricing,
+        subtotalCents: itemTotalCents(service, item.quantity),
+      },
+    ];
+  });
+}
+
 function buildMessage(order: IncomingOrder, orderId: string, totalCents: number): string {
   const lines: string[] = [
     '<b>🛒 TideSMM 新订单</b>',
@@ -221,11 +244,60 @@ async function notifyTelegram(env: Env, message: string): Promise<boolean> {
   return true;
 }
 
+async function detectOrderChannel(env: Env): Promise<OrderChannel> {
+  if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) return 'telegram';
+  if (!env.DB) return 'none';
+  try {
+    await env.DB.prepare('SELECT 1 FROM orders LIMIT 1').run();
+    return 'database';
+  } catch {
+    return 'none';
+  }
+}
+
+async function persistOrder(
+  env: Env,
+  orderId: string,
+  order: IncomingOrder,
+  totalCents: number,
+): Promise<void> {
+  if (!env.DB) return;
+  await env.DB.prepare(
+    `INSERT INTO orders
+      (id, created_at, customer_name, customer_contact, customer_email, payment, note, items, total_cents, telegram_sent, channel)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)`,
+  )
+    .bind(
+      orderId,
+      new Date().toISOString(),
+      order.customer.name,
+      order.customer.contact,
+      order.customer.email,
+      order.customer.payment,
+      order.customer.note,
+      JSON.stringify(itemSnapshots(order)),
+      totalCents,
+      env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID ? 'telegram' : 'database',
+    )
+    .run();
+}
+
+async function markTelegramSent(env: Env, orderId: string, sent: boolean): Promise<void> {
+  if (!env.DB) return;
+  try {
+    await env.DB.prepare('UPDATE orders SET telegram_sent = ? WHERE id = ?')
+      .bind(sent ? 1 : 0, orderId)
+      .run();
+  } catch (error) {
+    console.error('telegram_status_update_failed', String(error).slice(0, 200));
+  }
+}
+
 async function handleOrder(request: Request, env: Env): Promise<Response> {
   if (request.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405);
-  if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) {
-    return json({ ok: false, error: 'orders_not_configured' }, 503);
-  }
+  const channel = await detectOrderChannel(env);
+  if (channel === 'none') return json({ ok: false, error: 'orders_not_configured' }, 503);
+
   const contentType = request.headers.get('content-type') ?? '';
   if (!contentType.includes('application/json')) {
     return json({ ok: false, error: 'content_type_invalid' }, 415);
@@ -249,12 +321,95 @@ async function handleOrder(request: Request, env: Env): Promise<Response> {
     return service ? sum + itemTotalCents(service, item.quantity) : sum;
   }, 0);
   const orderId = makeOrderId();
-  const message = buildMessage(parsed.order, orderId, totalCents);
 
-  const sent = await notifyTelegram(env, message);
-  if (!sent) return json({ ok: false, error: 'notify_failed' }, 502);
+  try {
+    await persistOrder(env, orderId, parsed.order, totalCents);
+  } catch (error) {
+    console.error('order_persist_failed', String(error).slice(0, 200));
+    return json({ ok: false, error: 'store_failed' }, 500);
+  }
 
-  return json({ ok: true, orderId, totalCents });
+  const notified = await notifyTelegram(env, buildMessage(parsed.order, orderId, totalCents));
+  if (env.DB) await markTelegramSent(env, orderId, notified);
+
+  if (!env.DB && !notified) {
+    return json({ ok: false, error: 'notify_failed' }, 502);
+  }
+
+  return json({
+    ok: true,
+    orderId,
+    totalCents,
+    stored: Boolean(env.DB),
+    notified,
+  });
+}
+
+interface OrderRow {
+  id: string;
+  created_at: string;
+  customer_name: string;
+  customer_contact: string;
+  customer_email: string | null;
+  payment: string;
+  note: string | null;
+  items: string;
+  total_cents: number;
+  telegram_sent: number;
+  channel: string;
+}
+
+async function handleAdminOrders(request: Request, env: Env, url: URL): Promise<Response> {
+  if (request.method !== 'GET') return json({ ok: false, error: 'method_not_allowed' }, 405);
+  if (!env.ADMIN_TOKEN) return json({ ok: false, error: 'admin_not_configured' }, 503);
+  if (!env.DB) return json({ ok: false, error: 'store_not_configured' }, 503);
+
+  const authorization = request.headers.get('authorization') ?? '';
+  if (authorization !== `Bearer ${env.ADMIN_TOKEN}`) {
+    return json({ ok: false, error: 'unauthorized' }, 401);
+  }
+
+  const requestedLimit = Number(url.searchParams.get('limit') ?? '50');
+  const limit = Number.isFinite(requestedLimit)
+    ? Math.min(100, Math.max(1, Math.floor(requestedLimit)))
+    : 50;
+
+  try {
+    const { results } = await env.DB.prepare(
+      'SELECT * FROM orders ORDER BY created_at DESC LIMIT ?',
+    )
+      .bind(limit)
+      .all<OrderRow>();
+
+    const orders = (results ?? []).map((row) => {
+      let items: unknown = [];
+      try {
+        items = JSON.parse(row.items);
+      } catch {
+        items = [];
+      }
+      return {
+        id: row.id,
+        createdAt: row.created_at,
+        customer: {
+          name: row.customer_name,
+          contact: row.customer_contact,
+          email: row.customer_email ?? '',
+          payment: row.payment,
+          note: row.note ?? '',
+        },
+        items,
+        totalCents: row.total_cents,
+        telegramSent: Boolean(row.telegram_sent),
+        channel: row.channel,
+      };
+    });
+
+    return json({ ok: true, orders });
+  } catch (error) {
+    console.error('admin_orders_failed', String(error).slice(0, 200));
+    return json({ ok: false, error: 'query_failed' }, 500);
+  }
 }
 
 export default {
@@ -262,16 +417,20 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === '/api/health') {
+      const channel = await detectOrderChannel(env);
       return json({
         ok: true,
-        orderChannel:
-          env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID ? 'telegram' : 'none',
-        version: '1.0.0',
+        orderChannel: channel,
+        version: '1.1.0',
       });
     }
 
     if (url.pathname === '/api/orders') {
       return handleOrder(request, env);
+    }
+
+    if (url.pathname === '/api/admin/orders') {
+      return handleAdminOrders(request, env, url);
     }
 
     if (url.pathname.startsWith('/api/')) {

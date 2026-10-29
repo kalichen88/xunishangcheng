@@ -87,7 +87,7 @@ export function Checkout() {
     const localTotal = lines.reduce((sum, item) => sum + item.subtotalCents, 0);
 
     let order: Order;
-    if (channel === 'telegram') {
+    if (channel === 'telegram' || channel === 'database') {
       const result = await submitOrder({
         customer,
         items: detailed.map(({ line }) => ({
@@ -100,7 +100,7 @@ export function Checkout() {
         order = {
           id: result.orderId,
           createdAt: new Date().toISOString(),
-          channel: 'telegram',
+          channel: result.notified ? 'telegram' : 'database',
           status: 'pending',
           customer,
           items: lines,
@@ -357,9 +357,11 @@ export function Checkout() {
             <p className="text-[10px] text-muted/55">
               {channel === 'telegram'
                 ? '订单会实时发送给客服，请留意你的联系方式。'
-                : channel === 'none'
-                  ? '当前为本机订单模式：提交后请复制订单信息，通过客服渠道发送。'
-                  : '正在检测订单通知通道…'}
+                : channel === 'database'
+                  ? '订单会提交到客服后台，请等待确认支付与交付细节。'
+                  : channel === 'none'
+                    ? '当前为本机订单模式：提交后请复制订单信息，通过客服渠道发送。'
+                    : '正在检测订单通知通道…'}
             </p>
           </div>
         </form>

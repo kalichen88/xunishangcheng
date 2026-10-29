@@ -3,5 +3,6 @@ Allow: /
 Disallow: /checkout
 Disallow: /orders
 Disallow: /order/
+Disallow: /admin
 
-Sitemap: https://tidesmm.workers.dev/sitemap.xml
+Sitemap: https://tidesmm.kalichen80.workers.dev/sitemap.xml

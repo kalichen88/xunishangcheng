@@ -11,5 +11,12 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "tidesmm-orders",
+      "database_id": "cc652eba-3f76-49b6-ad3b-0badf0c2c36b"
+    }
+  ]
 }
