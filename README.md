@@ -174,6 +174,39 @@ pnpm deploy
 
 Telegram 与 ADMIN_TOKEN 是 Worker 的运行期 Secret，不进入 GitHub；在 Cloudflare Dashboard 或 `wrangler secret put` 配置一次后持续生效。
 
+## 宝塔部署（Nginx + PHP 8.2）
+
+项目同时提供宝塔版本：静态 SPA + `api.php`，订单保存在 `data/orders.php`，不需要 MySQL、Node 或 Cloudflare。
+
+```bash
+pnpm build
+pnpm build:baota
+```
+
+产物：
+
+- `release/au9922-baota.zip`：上传到站点根目录，解压后覆盖静态文件
+- `release/baota-admin-token.txt`：后台 `/admin` 登录令牌
+- `deploy/baota/config.example.php`：配置样例（`config.php` 已打进 zip）
+- `deploy/baota/nginx-fallback.conf`：宝塔 `location /` 需要改成 `try_files $uri $uri/ /index.php?$query_string;`
+
+宝塔操作：
+
+1. 站点根目录通常为 `/www/wwwroot/mizarapy.com`，把 zip 解压到根目录，不要嵌套一层文件夹。
+2. 确认 PHP 8.2、Nginx；`data/` 由 PHP 创建，确保 `www` 用户可写。
+3. 如果 `/api/health` 返回 HTML，按 `nginx-fallback.conf` 修改站点配置并重载 Nginx。
+4. 验收：`/api/health` 返回 JSON；`/data/store.php` 与 `/config.php` 返回 403。
+5. 后台 `/admin` 使用 `release/baota-admin-token.txt` 中的令牌。
+
+自动发版脚本在 [.deploy/bt-deploy.mjs](.deploy/bt-deploy.mjs)，使用前在仓库外配置 `BT_USER`、`BT_PASS`、`BT_PANEL`、`DEPLOY_SITE`、`DEPLOY_ROOT`：
+
+```bash
+node .deploy/bt-deploy.mjs --zip=release/au9922-baota.zip --dry-run
+node .deploy/bt-deploy.mjs --zip=release/au9922-baota.zip
+```
+
+宝塔版本的 `data/` 是唯一订单数据源，发版时不会覆盖；`config.php` 里的令牌与 USDT 地址也按线上文件保留。
+
 ## 目录结构
 
 ```text

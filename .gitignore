@@ -4,6 +4,10 @@ dist/
 .dev.vars
 .admin-token
 research/
+release/
+.deploy/baota.env
+.deploy/*.png
+.deploy/panel-requests.json
 *.local
 *.log
 .DS_Store

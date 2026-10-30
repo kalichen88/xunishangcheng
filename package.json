@@ -3,11 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "AU9922 — a modern social growth service storefront with a 3,959-item catalog and Cloudflare deployment.",
+  "description": "AU9922 — a modern social growth service storefront with a 3,943-item catalog, Cloudflare and Baota deployment.",
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/build-seo.mjs",
     "build": "tsc -b && vite build",
+    "build:baota": "node scripts/build-baota.mjs",
     "check": "tsc -b --force && tsc -p tsconfig.worker.json --noEmit",
     "preview": "vite preview",
     "catalog": "node scripts/build-catalog.mjs",

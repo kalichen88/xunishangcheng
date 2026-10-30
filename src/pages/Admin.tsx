@@ -83,7 +83,7 @@ export function Admin() {
             订单后台
           </h1>
           <p className="mt-3 text-center text-[12px] leading-relaxed text-muted">
-            输入 Worker 的 ADMIN_TOKEN 查看订单。令牌只保存在当前标签页的 sessionStorage。
+            输入后台的 ADMIN_TOKEN 查看订单。令牌只保存在当前标签页的 sessionStorage。
           </p>
 
           <form
@@ -127,8 +127,7 @@ export function Admin() {
           </form>
 
           <p className="mt-4 text-center text-[10px] leading-relaxed text-muted/60">
-            首次使用：运行 <code className="rounded bg-ink/5 px-1 py-0.5">wrangler secret put ADMIN_TOKEN</code>
-            ，设置一个足够长的随机值。
+            首次使用：在 Worker Secret 或服务器 <code className="rounded bg-ink/5 px-1 py-0.5">config.php</code> 中配置 ADMIN_TOKEN。
           </p>
         </div>
       </section>
