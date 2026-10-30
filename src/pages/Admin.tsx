@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { fetchAdminOrders, type AdminOrder } from '@/lib/api';
-import { formatMoney } from '@/lib/pricing';
+import { formatMoney, formatQuantity, formatRate } from '@/lib/pricing';
 import { paymentLabel } from '@/config';
 
 const TOKEN_KEY = 'tidesmm:admin-token';
@@ -250,8 +250,8 @@ export function Admin() {
                       <div className="min-w-0 flex-1">
                         <p className="text-[11px] font-medium text-ink">{item.name}</p>
                         <p className="num mt-0.5 text-[10px] text-muted">
-                          {item.quantity} × ${item.rate} /{' '}
-                          {item.pricing === 'fixed' ? '件' : '千次'} · 目标：
+                          {formatQuantity(item.quantity)} × ${formatRate(item.rate)} /{' '}
+                          {item.pricing === 'fixed' ? '件' : '万次'} · 目标：
                           {item.target || '待补充'}
                         </p>
                       </div>

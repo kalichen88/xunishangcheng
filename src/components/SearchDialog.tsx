@@ -5,7 +5,7 @@ import { ArrowUpRight, CornerDownLeft, Search, X } from 'lucide-react';
 import { PlatformBadge } from './PlatformIcon';
 import { shortTypeName } from '@/lib/catalog';
 import { searchServices } from '@/lib/catalog';
-import { formatRate, rateUnit } from '@/lib/pricing';
+import { formatQuantity, formatServiceRate, rateUnit } from '@/lib/pricing';
 import { useLockBody } from '@/hooks/useLockBody';
 
 const TRENDING = ['Telegram 成员', 'Instagram 关注', 'TikTok 播放', 'YouTube 订阅'];
@@ -139,11 +139,11 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
                         index === selected ? 'text-cream/55' : 'text-muted'
                       }`}
                     >
-                      {service.platformName} · {shortTypeName(service.type)} · 起订 {service.min}
+                      {service.platformName} · {shortTypeName(service.type)} · 起订 {formatQuantity(service.min)}
                     </span>
                   </span>
                   <span className="num shrink-0 text-[13px] font-semibold">
-                    ${formatRate(service.rate)}
+                    ${formatServiceRate(service)}
                     <span
                       className={`ml-0.5 text-[10px] font-normal ${
                         index === selected ? 'text-cream/50' : 'text-muted'

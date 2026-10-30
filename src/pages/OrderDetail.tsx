@@ -11,10 +11,11 @@ import {
 } from 'lucide-react';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { PlatformBadge } from '@/components/PlatformIcon';
+import { PaymentQr } from '@/components/PaymentQr';
 import { useToast } from '@/components/Toast';
 import { copyText, getOrder, orderChannelLabel, orderText } from '@/lib/orders';
 import type { Order } from '@/lib/orders';
-import { formatMoney, formatRate, usdtAmount } from '@/lib/pricing';
+import { formatMoney, formatQuantity, formatRate, usdtAmount } from '@/lib/pricing';
 import { payment, paymentLabel, site } from '@/config';
 
 export function OrderDetail() {
@@ -209,8 +210,8 @@ export function OrderDetail() {
                         {item.name}
                       </Link>
                       <p className="num mt-1 text-[10px] text-muted">
-                        {item.quantity.toLocaleString('zh-CN')} {item.pricing === 'fixed' ? '件' : '次'} × $
-                        {formatRate(item.rate)} / {item.pricing === 'fixed' ? '件' : '千次'}
+                        {formatQuantity(item.quantity)} {item.pricing === 'fixed' ? '件' : '次'} × $
+                        {formatRate(item.rate)} / {item.pricing === 'fixed' ? '件' : '万次'}
                       </p>
                       <p className="mt-1 break-all text-[10px] text-muted">
                         目标：{item.target || '待补充'}
@@ -293,6 +294,12 @@ export function OrderDetail() {
               <p className="num text-[9.5px] text-cream/45">
                 = {usdtAmount(order.totalCents)} USDT
               </p>
+              <div className="mt-3 flex flex-col items-center">
+                <PaymentQr size={120} />
+                <p className="mt-1 text-[8px] tracking-[0.1em] text-cream/35 uppercase">
+                  扫码支付 · 仅 TRC20
+                </p>
+              </div>
               <div className="mt-3 rounded-xl border border-cream/10 bg-cream/[0.05] p-2.5">
                 <p className="text-[8.5px] tracking-[0.1em] text-cream/35 uppercase">收款地址</p>
                 <div className="mt-1 flex items-start gap-1.5">

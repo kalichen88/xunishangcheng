@@ -27,7 +27,8 @@ import {
   defaultQuantity,
   deliveryLabel,
   formatMoney,
-  formatRate,
+  formatQuantity,
+  formatServiceRate,
   itemSubtotalCents,
   pricingModeLabel,
   quantityPresets,
@@ -88,7 +89,7 @@ export function ServiceDetail() {
   usePageMeta(
     service?.name,
     service
-      ? `${service.name}：${service.platformName} 社媒增长服务，$${formatRate(service.rate)} / ${rateUnit(service)}，起订 ${service.min}。`
+      ? `${service.name}：${service.platformName} 社媒增长服务，$${formatServiceRate(service)} / ${rateUnit(service)}，起订 ${formatQuantity(service.min)}。`
       : undefined,
   );
 
@@ -165,17 +166,17 @@ export function ServiceDetail() {
               {service.name} 是面向 {service.platformName} 的{shortTypeName(service.type)}
               服务，当前目录参考价为{' '}
               <span className="font-medium text-ink">
-                ${formatRate(service.rate)} / {rateUnit(service)}
+                ${formatServiceRate(service)} / {rateUnit(service)}
               </span>
-              。起订 {service.min} {unit}，单次最多 {service.max.toLocaleString('zh-CN')} {unit}，参考交付时间{' '}
+              。起订 {formatQuantity(service.min)} {unit}，单次最多 {formatQuantity(service.max)} {unit}，参考交付时间{' '}
               {deliveryLabel(service)}。下单时提供公开的目标链接或用户名即可，USDT 到账与排期由客服确认。
             </p>
 
             <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {[
-                { label: '单价', value: `$${formatRate(service.rate)}` },
-                { label: '起订', value: `${service.min} ${unit}` },
-                { label: '单次上限', value: service.max.toLocaleString('zh-CN') },
+                { label: '单价', value: `$${formatServiceRate(service)}` },
+                { label: '起订', value: `${formatQuantity(service.min)} ${unit}` },
+                { label: '单次上限', value: `${formatQuantity(service.max)} ${unit}` },
                 { label: '参考时效', value: deliveryLabel(service) },
               ].map((item) => (
                 <div key={item.label} className="rounded-2xl border border-line bg-cream px-4 py-3.5">
@@ -195,8 +196,8 @@ export function ServiceDetail() {
                   ['服务类型', typeName(service.type)],
                   ['目录分类', service.category],
                   ['计费方式', pricingModeLabel(service)],
-                  ['单价', `$${formatRate(service.rate)} / ${rateUnit(service)}`],
-                  ['起订 / 上限', `${service.min} – ${service.max} ${unit}`],
+                  ['单价', `$${formatServiceRate(service)} / ${rateUnit(service)}`],
+                  ['起订 / 上限', `${formatQuantity(service.min)} – ${formatQuantity(service.max)} ${unit}`],
                   ['参考交付', deliveryLabel(service)],
                   ['服务编号', `#${service.id}`],
                 ].map(([label, value]) => (
@@ -261,7 +262,7 @@ export function ServiceDetail() {
                   </p>
                   <p className="mt-1 flex items-baseline gap-1">
                     <span className="num text-[38px] font-semibold leading-none tracking-[-0.04em] text-ink">
-                      ${formatRate(service.rate)}
+                      ${formatServiceRate(service)}
                     </span>
                     <span className="text-[11px] text-muted">/ {rateUnit(service)}</span>
                   </p>
@@ -277,7 +278,7 @@ export function ServiceDetail() {
                     购买数量
                   </label>
                   <span className="num text-[10px] text-muted">
-                    {service.min} – {service.max.toLocaleString('zh-CN')} {unit}
+                    {formatQuantity(service.min)} – {formatQuantity(service.max)} {unit}
                   </span>
                 </div>
                 <div className="mt-2 flex items-stretch gap-2">
@@ -288,6 +289,11 @@ export function ServiceDetail() {
                     className="flex-1 justify-between"
                   />
                 </div>
+                {quantity >= 10000 ? (
+                  <p className="num mt-1 text-right text-[9px] text-muted/60">
+                    = {formatQuantity(quantity)} {unit}
+                  </p>
+                ) : null}
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {presets.map((preset) => (
                     <button
@@ -300,7 +306,7 @@ export function ServiceDetail() {
                           : 'border-line bg-transparent text-muted hover:border-ink hover:text-ink'
                       }`}
                     >
-                      {preset.toLocaleString('zh-CN')}
+                      {formatQuantity(preset)}
                     </button>
                   ))}
                   <button
@@ -342,7 +348,7 @@ export function ServiceDetail() {
                   </p>
                 </div>
                 <span className="num text-[10px] text-muted">
-                  {quantity.toLocaleString('zh-CN')} {unit}
+                  {formatQuantity(quantity)} {unit}
                 </span>
               </div>
 
@@ -385,7 +391,7 @@ export function ServiceDetail() {
           <div>
             <p className="num text-[18px] font-semibold text-ink">{formatMoney(totalCents)}</p>
             <p className="text-[10px] text-muted">
-              {quantity.toLocaleString('zh-CN')} {unit} · 参考 {deliveryLabel(service)}
+              {formatQuantity(quantity)} {unit} · 参考 {deliveryLabel(service)}
             </p>
           </div>
           <div className="flex gap-2">

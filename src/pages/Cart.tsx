@@ -6,7 +6,7 @@ import { QuantityStepper } from '@/components/QuantityStepper';
 import { useCart } from '@/components/CartProvider';
 import { useToast } from '@/components/Toast';
 import { shortTypeName } from '@/lib/catalog';
-import { formatMoney, formatRate, rateUnit } from '@/lib/pricing';
+import { formatMoney, formatQuantity, formatServiceRate, rateUnit } from '@/lib/pricing';
 
 export function Cart() {
   usePageMeta('购物车');
@@ -79,7 +79,7 @@ export function Cart() {
                     {service.platformName} · {shortTypeName(service.type)} · 服务 #{service.id}
                   </p>
                   <p className="num mt-1 text-[10.5px] text-muted/70">
-                    ${formatRate(service.rate)} / {rateUnit(service)} · 起订 {service.min}
+                    ${formatServiceRate(service)} / {rateUnit(service)} · 起订 {formatQuantity(service.min)}
                   </p>
                 </div>
                 <button

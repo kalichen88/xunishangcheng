@@ -313,7 +313,7 @@ export function Services() {
                 <SlidersHorizontal size={12} /> 价格怎么算？
               </p>
               <p className="mt-2 text-[10.5px] leading-relaxed text-muted">
-                多数服务按每千次计价，整包服务按件计价。单价 × 数量，就是购物车里的金额。
+                多数服务按每万次计价，整包服务按件计价。单价 × 数量，就是购物车里的金额。
               </p>
               <Link
                 to="/#pricing"

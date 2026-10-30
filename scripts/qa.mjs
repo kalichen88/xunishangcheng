@@ -109,7 +109,7 @@ await desktop.screenshot({ path: path.join(OUT, 'detail-desktop.png'), fullPage:
 const detailState = await desktop.evaluate(() => ({
   title: document.title,
   h1: document.querySelector('h1')?.textContent?.trim(),
-  price: document.body.innerText.includes('0.0869'),
+  price: document.body.innerText.includes('0.8686'),
 }));
 console.log('DETAIL', detailState);
 

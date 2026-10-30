@@ -4,7 +4,7 @@ import { PlatformBadge } from './PlatformIcon';
 import { useCart } from './CartProvider';
 import { useToast } from './Toast';
 import { shortTypeName } from '@/lib/catalog';
-import { deliveryLabel, formatRate, rateUnit } from '@/lib/pricing';
+import { deliveryLabel, formatQuantity, formatServiceRate, rateUnit } from '@/lib/pricing';
 import type { Service } from '@/lib/types';
 
 export function ServiceCard({ service }: { service: Service }) {
@@ -39,12 +39,12 @@ export function ServiceCard({ service }: { service: Service }) {
         <div>
           <div className="flex items-baseline gap-1">
             <span className="num text-[22px] font-semibold tracking-[-0.03em] text-ink">
-              ${formatRate(service.rate)}
+              ${formatServiceRate(service)}
             </span>
             <span className="text-[11px] text-muted">/ {rateUnit(service)}</span>
           </div>
           <p className="mt-1.5 truncate text-[11px] text-muted">
-            起订 {service.min} · {deliveryLabel(service)}
+            起订 {formatQuantity(service.min)} · {deliveryLabel(service)}
           </p>
         </div>
         <button

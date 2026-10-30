@@ -1,15 +1,12 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   ArrowUpRight,
   BadgePercent,
-  Check,
   Layers3,
   Link2,
   PackageCheck,
   ReceiptText,
-  Search,
   ShieldCheck,
   Sparkles,
   TrendingUp,
@@ -20,6 +17,8 @@ import { SectionHeading } from '@/components/SectionHeading';
 import { PlatformBadge } from '@/components/PlatformIcon';
 import { ServiceCard } from '@/components/ServiceCard';
 import { FaqAccordion } from '@/components/FaqAccordion';
+import { HeroCarousel } from '@/components/HeroCarousel';
+import { HeroSearch } from '@/components/HeroSearch';
 import {
   catalog,
   featuredServices,
@@ -28,19 +27,23 @@ import {
   platforms,
   shortTypeName,
 } from '@/lib/catalog';
-import { deliveryLabel, formatRate, formatMoney, itemSubtotalCents } from '@/lib/pricing';
+import {
+  deliveryLabel,
+  formatMoney,
+  formatQuantity,
+  formatRate,
+  formatServiceRate,
+  itemSubtotalCents,
+} from '@/lib/pricing';
 import { faqItems } from '@/content/faq';
 
 const heroService = getService(885) ?? featuredServices[0];
-const lowestRate = Math.min(
-  ...catalog.services.filter((service) => service.pricing === 'per1000').map((service) => service.rate),
-);
 
 const whyFeatures = [
   {
     icon: BadgePercent,
     title: '价格写在明面上',
-    body: '每千次或整包的单价、起订量、参考时效都展示在商品页。下单前就能算清总价，不用先问价再猜预算。',
+    body: '每万次或整包的单价、起订量、参考时效都展示在商品页。下单前就能算清总价，不用先问价再猜预算。',
   },
   {
     icon: TrendingUp,
@@ -77,216 +80,6 @@ const steps = [
   },
 ];
 
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <p className="num text-[20px] font-semibold tracking-[-0.03em] text-cream sm:text-[24px]">
-        {value}
-      </p>
-      <p className="mt-1 text-[10px] tracking-wide text-cream/40">{label}</p>
-    </div>
-  );
-}
-
-function Hero() {
-  const navigate = useNavigate();
-  const [query, setQuery] = useState('');
-  const trending = ['Telegram 成员', 'Instagram 关注', 'TikTok 播放', 'YouTube 订阅'];
-  const bars = [38, 52, 45, 64, 57, 74, 66, 88, 79, 98];
-
-  return (
-    <section className="container-page pt-5 sm:pt-7">
-      <div className="relative overflow-hidden rounded-[30px] bg-ink text-cream sm:rounded-[38px]">
-        <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div
-          className="pointer-events-none absolute -top-40 right-[-10%] h-[420px] w-[420px] rounded-full bg-lime/10 blur-[100px]"
-          aria-hidden="true"
-        />
-
-        <div className="relative grid gap-12 px-6 py-12 sm:px-10 sm:py-16 lg:grid-cols-[1.08fr_.92fr] lg:px-14 lg:py-20">
-          <div className="max-w-[640px]">
-            <div className="animate-fade-up flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex h-7 items-center gap-2 rounded-full border border-cream/15 bg-cream/[0.06] px-3 text-[10px] tracking-wide text-cream/70">
-                <span className="h-1.5 w-1.5 rounded-full bg-lime" />
-                2026 服务目录已上架
-              </span>
-              <span className="num text-[10px] tracking-wide text-cream/35">
-                {catalog.total.toLocaleString('zh-CN')} 项 · {platforms.length} 个平台
-              </span>
-            </div>
-
-            <h1
-              className="animate-fade-up mt-7 font-display text-[46px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[62px] lg:text-[72px]"
-              style={{ animationDelay: '80ms' }}
-            >
-              把流量，
-              <br />
-              做成
-              <span className="relative inline-block text-lime">
-                增长
-                <svg
-                  className="absolute -bottom-1 left-0 h-3 w-full text-lime/70"
-                  viewBox="0 0 200 12"
-                  preserveAspectRatio="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M2 9C42 3 74 3 104 6c30 3 58 2 94-2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </span>
-              。
-            </h1>
-
-            <p
-              className="animate-fade-up mt-7 max-w-[500px] text-[14px] leading-[1.9] text-cream/55 sm:text-[15px]"
-              style={{ animationDelay: '160ms' }}
-            >
-              从 Telegram 到 TikTok，{platforms.length} 个主流平台的社媒增长服务。
-              美元计价，USDT-TRC20 结算，按需起量。
-            </p>
-
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                const q = query.trim();
-                navigate(q ? `/services?q=${encodeURIComponent(q)}` : '/services');
-              }}
-              className="animate-fade-up mt-8 flex max-w-[560px] items-center gap-2 rounded-full border border-cream/15 bg-cream/[0.07] p-1.5 backdrop-blur-sm"
-              style={{ animationDelay: '220ms' }}
-            >
-              <Search size={17} className="ml-2.5 shrink-0 text-cream/35" />
-              <input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="搜索平台、服务或场景"
-                className="h-11 min-w-0 flex-1 bg-transparent text-[13px] text-cream outline-none placeholder:text-cream/30"
-                aria-label="搜索服务"
-              />
-              <button type="submit" className="btn btn-lime h-11 shrink-0 px-5 text-[13px]">
-                搜索
-              </button>
-            </form>
-
-            <div
-              className="animate-fade-up mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-[11px] text-cream/30"
-              style={{ animationDelay: '280ms' }}
-            >
-              <span>试试</span>
-              {trending.map((term) => (
-                <button
-                  key={term}
-                  type="button"
-                  onClick={() => navigate(`/services?q=${encodeURIComponent(term)}`)}
-                  className="text-cream/55 underline decoration-cream/20 underline-offset-4 transition hover:text-lime hover:decoration-lime/50"
-                >
-                  {term}
-                </button>
-              ))}
-            </div>
-
-            <div
-              className="animate-fade-up mt-10 grid grid-cols-2 gap-6 border-t border-cream/10 pt-6 sm:grid-cols-4"
-              style={{ animationDelay: '340ms' }}
-            >
-              <Stat value={catalog.total.toLocaleString('zh-CN')} label="在售服务" />
-              <Stat value={String(platforms.length)} label="覆盖平台" />
-              <Stat value={`$${formatRate(lowestRate)}`} label="千次起价" />
-              <Stat value={String(catalog.types.length)} label="服务类型" />
-            </div>
-          </div>
-
-          <div className="relative hidden min-h-[470px] lg:block" aria-label="商城界面示意">
-            <div className="dot-grid absolute right-8 top-8 h-32 w-32 opacity-30" aria-hidden="true" />
-
-            <div className="absolute left-0 top-2 z-20 -rotate-2 rounded-full border border-cream/15 bg-cream/[0.08] px-3.5 py-2 text-[10px] text-cream/65 backdrop-blur">
-              <span className="mr-1.5 inline-grid h-4 w-4 place-items-center rounded-full bg-lime text-ink">
-                <Check size={10} strokeWidth={3} />
-              </span>
-              全部明码标价
-            </div>
-
-            <div className="absolute right-0 top-6 w-[330px] rotate-[2.5deg] rounded-[28px] bg-lime p-6 text-ink shadow-lift">
-              <div className="flex items-center justify-between text-[9px] font-semibold tracking-[0.18em] text-ink/45 uppercase">
-                <span>AU Index</span>
-                <span>2026</span>
-              </div>
-              <p className="num mt-7 text-[62px] font-semibold leading-none tracking-[-0.06em]">
-                {catalog.total.toLocaleString('zh-CN')}
-              </p>
-              <p className="mt-2 text-[13px] font-medium">项服务，随时可下单</p>
-              <div className="mt-6 flex h-16 items-end gap-1.5" aria-hidden="true">
-                {bars.map((height, index) => (
-                  <span
-                    key={index}
-                    className={`flex-1 rounded-t-[3px] ${index === bars.length - 1 ? 'bg-ink' : 'bg-ink/25'}`}
-                    style={{ height: `${height}%` }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="absolute bottom-0 left-0 z-30 w-[338px] -rotate-2 rounded-[26px] bg-cream p-5 text-ink shadow-lift">
-              <div className="flex items-center justify-between">
-                <span className="text-[9px] font-semibold tracking-[0.16em] text-muted uppercase">
-                  示例订单
-                </span>
-                <span className="rounded-full bg-mint/10 px-2 py-1 text-[9px] font-semibold text-mint">
-                  进行中
-                </span>
-              </div>
-              <div className="mt-4 flex items-start gap-3">
-                <PlatformBadge platform="telegram" size={40} />
-                <div className="min-w-0">
-                  <p className="line-clamp-2 text-[12px] font-semibold leading-snug">
-                    {heroService.name}
-                  </p>
-                  <p className="mt-1 text-[10px] text-muted">
-                    ${formatRate(heroService.rate)} / 千次 · 起订 {heroService.min}
-                  </p>
-                </div>
-              </div>
-              <div className="mt-5">
-                <div className="flex items-center justify-between text-[10px] text-muted">
-                  <span>参考进度</span>
-                  <span className="num font-medium text-ink">68%</span>
-                </div>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-ink/[0.08]">
-                  <div className="h-full w-[68%] rounded-full bg-ink" />
-                </div>
-              </div>
-              <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-3 text-center">
-                <div>
-                  <p className="num text-[13px] font-semibold">{heroService.min}</p>
-                  <p className="mt-0.5 text-[9px] text-muted">起订</p>
-                </div>
-                <div>
-                  <p className="num text-[13px] font-semibold">
-                    {formatMoney(itemSubtotalCents(heroService, heroService.min))}
-                  </p>
-                  <p className="mt-0.5 text-[9px] text-muted">小计</p>
-                </div>
-                <div>
-                  <p className="text-[13px] font-semibold">{deliveryLabel(heroService)}</p>
-                  <p className="mt-0.5 text-[9px] text-muted">参考时效</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute right-4 bottom-9 z-40 rotate-1 rounded-full border border-cream/15 bg-ink/80 px-3.5 py-2 text-[10px] text-cream/70 backdrop-blur">
-              参考交付 · {deliveryLabel(heroService)}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function PlatformStrip() {
   return (
     <div className="container-page mt-6">
@@ -306,7 +99,7 @@ function PlatformStrip() {
                 <PlatformBadge platform={platform.key} size={22} rounded="rounded-[7px]" />
                 <span className="font-medium">{platform.name}</span>
                 <span className="num text-[10px] text-muted/50 group-hover:text-muted">
-                  {minRate !== null ? `$${formatRate(minRate)} 起` : `${platform.count} 项`}
+                  {minRate !== null ? `$${formatRate(minRate)} 万次起` : `${platform.count} 项`}
                 </span>
               </Link>
             );
@@ -362,7 +155,7 @@ function PlatformsSection() {
                     <p className="num mt-1 text-[11px] text-muted">{platform.count} 项服务</p>
                   </div>
                   <p className="mt-4 text-[10px] text-muted/70">
-                    {minRate !== null ? `$${formatRate(minRate)} 起 / 千次` : '整包服务'}
+                    {minRate !== null ? `$${formatRate(minRate)} 起 / 万次` : '整包服务'}
                   </p>
                 </Link>
               </Reveal>
@@ -480,16 +273,16 @@ function PricingSection() {
                     {service.name}
                   </p>
                   <p className="mt-1 text-[10px] text-muted">
-                    {shortTypeName(service.type)} · 起订 {service.min} ·{' '}
+                    {shortTypeName(service.type)} · 起订 {formatQuantity(service.min)} ·{' '}
                     {deliveryLabel(service)}
                   </p>
                 </div>
                 <div className="shrink-0 text-right">
                   <p className="num text-[13px] font-semibold text-ink">
-                    ${formatRate(service.rate)}
+                    ${formatServiceRate(service)}
                   </p>
                   <p className="text-[9px] text-muted">
-                    /{service.pricing === 'fixed' ? '件' : '千次'}
+                    /{service.pricing === 'fixed' ? '件' : '万次'}
                   </p>
                 </div>
               </Link>
@@ -529,12 +322,12 @@ function PricingSection() {
                       </p>
                     </td>
                     <td className="num px-4 py-4 text-[13px] font-semibold text-ink">
-                      ${formatRate(service.rate)}
+                      ${formatServiceRate(service)}
                       <span className="ml-1 text-[10px] font-normal text-muted">
-                        /{service.pricing === 'fixed' ? '件' : '千次'}
+                        /{service.pricing === 'fixed' ? '件' : '万次'}
                       </span>
                     </td>
-                    <td className="num px-4 py-4 text-[12px] text-muted">{service.min}</td>
+                    <td className="num px-4 py-4 text-[12px] text-muted">{formatQuantity(service.min)}</td>
                     <td className="px-4 py-4 text-[11px] text-muted">
                       {deliveryLabel(service)}
                     </td>
@@ -555,8 +348,8 @@ function PricingSection() {
           <div className="flex flex-col gap-2 border-t border-line bg-paper/50 px-6 py-4 text-[11px] text-muted sm:flex-row sm:items-center sm:justify-between">
             <span className="flex items-center gap-2">
               <Sparkles size={13} className="text-ink" />
-              示例：1,000 次 × ${formatRate(heroService.rate)} / 千次 ={' '}
-              {formatMoney(itemSubtotalCents(heroService, 1000))}
+              示例：10,000 次 × ${formatServiceRate(heroService)} / 万次 ={' '}
+              {formatMoney(itemSubtotalCents(heroService, 10000))}
             </span>
             <span className="text-muted/60">以上为目录真实条目，最终金额以购物车为准</span>
           </div>
@@ -688,7 +481,8 @@ export function Home() {
   usePageMeta();
   return (
     <>
-      <Hero />
+      <HeroCarousel />
+      <HeroSearch />
       <PlatformStrip />
       <PlatformsSection />
       <FeaturedSection />

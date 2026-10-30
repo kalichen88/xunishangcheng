@@ -1,5 +1,5 @@
 import { payment, paymentLabel, site } from '@/config';
-import { itemSubtotalCents } from './pricing';
+import { formatQuantity, formatRate, itemSubtotalCents } from './pricing';
 import { getService } from './catalog';
 import type { PricingMode, Service } from './types';
 import { readStorage, writeStorage } from './storage';
@@ -50,7 +50,7 @@ export function buildOrderLine(service: Service, quantity: number, target: strin
     platformName: service.platformName,
     quantity,
     target: target.trim().slice(0, 500),
-    rate: service.rate,
+    rate: service.pricing === 'fixed' ? service.rate : service.rate * 10,
     pricing: service.pricing,
     subtotalCents: itemSubtotalCents(service, quantity),
   };
@@ -103,7 +103,7 @@ export function orderText(order: Order): string {
   order.items.forEach((item, index) => {
     lines.push(
       `${index + 1}. ${item.name}`,
-      `   数量：${item.quantity}${item.pricing === 'fixed' ? ' 件' : ' 次'}｜单价：$${item.rate}${item.pricing === 'fixed' ? '/件' : '/千次'}`,
+      `   数量：${formatQuantity(item.quantity)}${item.pricing === 'fixed' ? ' 件' : ' 次'}｜单价：$${formatRate(item.rate)}${item.pricing === 'fixed' ? '/件' : '/万次'}`,
       `   目标：${item.target || '待补充'}`,
       `   小计：$${(item.subtotalCents / 100).toFixed(2)}`,
     );

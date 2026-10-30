@@ -46,7 +46,8 @@ export function minRateForPlatform(key: PlatformKey): number | null {
   let min: number | null = null;
   for (const service of services) {
     if (service.platform !== key || service.pricing !== 'per1000') continue;
-    if (min === null || service.rate < min) min = service.rate;
+    const perWan = service.rate * 10;
+    if (min === null || perWan < min) min = perWan;
   }
   return min;
 }

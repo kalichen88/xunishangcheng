@@ -13,13 +13,39 @@ export function defaultQuantity(service: Service): number {
 
 export function stepFor(service: Service): number {
   if (service.pricing === 'fixed') return 1;
-  if (service.min >= 1000) return 100;
-  if (service.min >= 100) return 10;
+  if (service.min >= 1000) return 1000;
+  if (service.min >= 100) return 100;
   return 1;
 }
 
 export function quantityUnit(service: Service): string {
   return service.pricing === 'fixed' ? '件' : '次';
+}
+
+export const RATE_QUANTITY = 10000;
+
+/** Catalog rates are stored per 1,000 for per1000 services; display them per 10,000. */
+export function ratePerWan(service: Pick<Service, 'rate' | 'pricing'>): number {
+  return service.pricing === 'fixed' ? service.rate : service.rate * (RATE_QUANTITY / 1000);
+}
+
+export function formatServiceRate(service: Pick<Service, 'rate' | 'pricing'>): string {
+  return formatRate(ratePerWan(service));
+}
+
+export function formatSnapshotRate(rate: number, pricing: Service['pricing']): string {
+  return formatRate(pricing === 'fixed' ? rate : rate * (RATE_QUANTITY / 1000));
+}
+
+export function formatQuantity(quantity: number): string {
+  if (quantity >= 10000) {
+    const wan = quantity / 10000;
+    return `${new Intl.NumberFormat('zh-CN', {
+      maximumFractionDigits: 2,
+      minimumFractionDigits: 0,
+    }).format(wan)} 万`;
+  }
+  return quantity.toLocaleString('zh-CN');
 }
 
 export function itemSubtotalCents(service: Service, quantity: number): number {
@@ -52,11 +78,11 @@ export function usdtAmount(cents: number): string {
 }
 
 export function rateUnit(service: Service): string {
-  return service.pricing === 'fixed' ? '件' : '千次';
+  return service.pricing === 'fixed' ? '件' : '万次';
 }
 
 export function pricingModeLabel(service: Service): string {
-  return service.pricing === 'fixed' ? '整包价' : '每千次';
+  return service.pricing === 'fixed' ? '整包价' : '每万次';
 }
 
 export function deliveryLabel(service: Service): string {
@@ -83,8 +109,8 @@ export function targetPlaceholder(platform: string): string {
 export function quantityPresets(service: Service): number[] {
   if (service.pricing === 'fixed') return [1];
   const min = service.min;
-  const values = [min, min * 2, min * 5, min * 10].map((value) =>
-    clampQuantity(service, value),
+  const values = [min, Math.max(min, 1000), Math.max(min, 10000), Math.max(min, 50000)].map(
+    (value) => clampQuantity(service, value),
   );
   return [...new Set(values)];
 }

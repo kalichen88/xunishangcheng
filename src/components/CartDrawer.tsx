@@ -6,7 +6,7 @@ import { PlatformBadge } from './PlatformIcon';
 import { QuantityStepper } from './QuantityStepper';
 import { useCart } from './CartProvider';
 import { useLockBody } from '@/hooks/useLockBody';
-import { formatMoney, formatRate } from '@/lib/pricing';
+import { formatMoney, formatQuantity, formatServiceRate } from '@/lib/pricing';
 
 export function CartDrawer() {
   const {
@@ -95,8 +95,8 @@ export function CartDrawer() {
                           {service.name}
                         </p>
                         <p className="mt-1 text-[11px] text-muted">
-                          ${formatRate(service.rate)} / {service.pricing === 'fixed' ? '件' : '千次'} · 起订{' '}
-                          {service.min}
+                          ${formatServiceRate(service)} / {service.pricing === 'fixed' ? '件' : '万次'} · 起订{' '}
+                          {formatQuantity(service.min)}
                         </p>
                       </div>
                       <button

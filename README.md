@@ -13,7 +13,7 @@
 ## 功能
 
 - **完整服务目录**：3,959 项服务，可按平台、服务类型、关键词筛选与排序。
-- **商品详情与价格计算**：按千次 / 整包两种计价方式，自动校验起订量与上限。
+- **商品详情与价格计算**：按万次 / 整包两种计价方式，自动校验起订量与上限。
 - **购物车**：本地持久化、数量调整、目标链接填写、金额实时计算。
 - **结算流程**：联系方式、USDT-TRC20 收款地址、备注、服务条款确认；订单编号与进度页。
 - **订单记录**：订单写入 Cloudflare D1，同时在本机保留一份；支持重新复制订单信息、查看收款地址、联系客服。
@@ -157,20 +157,14 @@ pnpm exec wrangler dev \
 
 ## 自动部署（Cloudflare Git 集成）
 
-当前仓库已与 Cloudflare 完成 GitHub 授权。把代码推送到 `main` 后，Cloudflare 会按项目配置自动拉取、构建并部署。
+当前仓库已与 Cloudflare 完成 GitHub 授权，项目类型已确认为 **Workers**（不是纯静态 Pages）。把代码推送到 `main` 后，Cloudflare 会按项目配置自动拉取、构建并部署。
 
-如果 Cloudflare 项目使用 **Workers Builds**：
+Workers Builds 配置：
 
 - Build command：`pnpm build`
 - Deploy command：`pnpm exec wrangler deploy`
 - Root directory：仓库根目录
 - D1 绑定沿用 [wrangler.jsonc](wrangler.jsonc) 中的配置
-
-如果项目使用 **Pages**：
-
-- Build command：`pnpm build`
-- Build output directory：`dist`
-- Pages 不包含本项目的 Worker API；订单会回退到「本机订单模式」。需要完整订单后台时，请使用 Workers 或把 `/api/*` 单独部署为 Worker。
 
 本地手动部署仍然可以：
 
@@ -211,7 +205,7 @@ Telegram 与 ADMIN_TOKEN 是 Worker 的运行期 Secret，不进入 GitHub；在
 
 - 统一平台名称（Telegram、Instagram、TikTok、YouTube、X / Twitter、Facebook、WhatsApp、Discord、LinkedIn、Threads）；
 - 推导服务场景（成员/关注、浏览/播放、点赞/表情、评论、分享/转发、直播/空间、助力/加速、其他）；
-- 根据起订与上限判断「每千次」或「整包」计价；
+- 根据起订与上限判断「每万次」或「整包」计价；
 - 生成搜索索引、精选服务与平台统计。
 
 重新生成：
