@@ -27,7 +27,7 @@ export function PaymentQr({
           includeMargin
         />
       </div>
-      <p className="mx-auto mt-2 max-w-[250px] break-all font-mono text-[9px] leading-relaxed text-ink/60">
+      <p className="mx-auto mt-2 max-w-[250px] break-all font-mono text-[10px] leading-relaxed text-ink/60">
         {payment.address}
       </p>
       {onCopy ? (
