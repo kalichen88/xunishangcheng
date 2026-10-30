@@ -3,7 +3,7 @@ export const site = {
   cnName: '全球社媒增长',
   tagline: '全球社媒增长服务商城',
   description:
-    '覆盖 Telegram、Instagram、TikTok、YouTube、X、Facebook 等 10 个平台的社媒增长服务。3,959 项服务明码标价，按需起量，USDT-TRC20 结算。',
+    '覆盖 Telegram、Instagram、TikTok、YouTube、X、Facebook 等 9 个平台的社媒增长服务。3,943 项服务明码标价，按需起量，USDT-TRC20 结算。',
   url: 'https://tidesmm.kalichen80.workers.dev',
   telegram: 'https://t.me/Au9922',
   telegramHandle: '@Au9922',

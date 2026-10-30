@@ -43,7 +43,7 @@ const whyFeatures = [
   {
     icon: BadgePercent,
     title: '价格写在明面上',
-    body: '每万次或整包的单价、起订量、参考时效都展示在商品页。下单前就能算清总价，不用先问价再猜预算。',
+    body: '每 1k 或整包的单价、起订量、参考时效都展示在商品页。下单前就能算清总价，不用先问价再猜预算。',
   },
   {
     icon: TrendingUp,
@@ -99,7 +99,7 @@ function PlatformStrip() {
                 <PlatformBadge platform={platform.key} size={22} rounded="rounded-[7px]" />
                 <span className="font-medium">{platform.name}</span>
                 <span className="num text-[10px] text-muted/50 group-hover:text-muted">
-                  {minRate !== null ? `$${formatRate(minRate)} 万次起` : `${platform.count} 项`}
+                  {minRate !== null ? `$${formatRate(minRate)} 1k 起` : `${platform.count} 项`}
                 </span>
               </Link>
             );
@@ -155,7 +155,7 @@ function PlatformsSection() {
                     <p className="num mt-1 text-[11px] text-muted">{platform.count} 项服务</p>
                   </div>
                   <p className="mt-4 text-[10px] text-muted/70">
-                    {minRate !== null ? `$${formatRate(minRate)} 起 / 万次` : '整包服务'}
+                    {minRate !== null ? `$${formatRate(minRate)} 起 / 1k` : '整包服务'}
                   </p>
                 </Link>
               </Reveal>
@@ -282,7 +282,7 @@ function PricingSection() {
                     ${formatServiceRate(service)}
                   </p>
                   <p className="text-[9px] text-muted">
-                    /{service.pricing === 'fixed' ? '件' : '万次'}
+                    /{service.pricing === 'fixed' ? '件' : '1k'}
                   </p>
                 </div>
               </Link>
@@ -324,7 +324,7 @@ function PricingSection() {
                     <td className="num px-4 py-4 text-[13px] font-semibold text-ink">
                       ${formatServiceRate(service)}
                       <span className="ml-1 text-[10px] font-normal text-muted">
-                        /{service.pricing === 'fixed' ? '件' : '万次'}
+                        /{service.pricing === 'fixed' ? '件' : '1k'}
                       </span>
                     </td>
                     <td className="num px-4 py-4 text-[12px] text-muted">{formatQuantity(service.min)}</td>
@@ -348,8 +348,8 @@ function PricingSection() {
           <div className="flex flex-col gap-2 border-t border-line bg-paper/50 px-6 py-4 text-[11px] text-muted sm:flex-row sm:items-center sm:justify-between">
             <span className="flex items-center gap-2">
               <Sparkles size={13} className="text-ink" />
-              示例：10,000 次 × ${formatServiceRate(heroService)} / 万次 ={' '}
-              {formatMoney(itemSubtotalCents(heroService, 10000))}
+              示例：1,000 次 × ${formatServiceRate(heroService)} / 1k ={' '}
+              {formatMoney(itemSubtotalCents(heroService, 1000))}
             </span>
             <span className="text-muted/60">以上为目录真实条目，最终金额以购物车为准</span>
           </div>

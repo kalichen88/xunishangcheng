@@ -15,7 +15,6 @@ const PLATFORM_NAMES = [
   'WhatsApp',
   'Discord',
   'LinkedIn',
-  'Threads',
 ];
 
 function Ticker({ dark = false }: { dark?: boolean }) {
@@ -49,7 +48,7 @@ export function HeroCarousel() {
 
   useEffect(() => {
     if (paused || reducedMotion) return;
-    const timer = window.setInterval(() => setIndex((value) => (value + 1) % count), 6500);
+    const timer = window.setInterval(() => setIndex((value) => (value + 1) % count), 3000);
     return () => window.clearInterval(timer);
   }, [paused, reducedMotion, count]);
 
@@ -163,12 +162,14 @@ export function HeroCarousel() {
                   <PlatformBadge platform="telegram" size={42} />
                   <div>
                     <p className="text-[12px] font-semibold">Telegram 成员</p>
-                    <p className="mt-0.5 text-[10px] text-muted">90 天不掉落 · 59 分钟起</p>
+                    <p className="mt-0.5 text-[10px] text-muted">90 天不掉落 · 500 起</p>
                   </div>
                 </div>
                 <div className="mt-4 flex items-end justify-between border-t border-line pt-3">
-                  <span className="text-[10px] text-muted">每万次起</span>
-                  <span className="num text-[20px] font-semibold">$0.87</span>
+                  <span className="text-[10px] text-muted">原站 ¥1.544 / 1k</span>
+                  <span className="num text-[20px] font-semibold">
+                    $0.2206 <span className="text-[9px] font-normal text-muted">/1k</span>
+                  </span>
                 </div>
               </div>
             </div>

@@ -34,7 +34,7 @@ src/components/  布局、商品卡、购物车抽屉、搜索、Toast
 src/lib/         api.ts（Worker 客户端）、catalog.ts（索引）、pricing.ts（计价）、orders.ts、storage.ts、types.ts
 src/config.ts    品牌、客服 Telegram、USDT 收款地址、汇率开关
 src/data/catalog.json   构建产物（由 pnpm catalog 生成，勿手改）
-data/catalog.source.json 公开价格表原始快照（3,959 条）
+data/catalog.source.json 公开价格表原始快照（3,943 条）
 worker/index.ts  Worker：静态资源、/api/health、/api/orders、/api/admin/orders、Telegram 通知
 worker/schema.sql D1 建表语句
 scripts/         build-catalog / build-seo / build-og / qa / live-check

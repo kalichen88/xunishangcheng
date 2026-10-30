@@ -100,12 +100,7 @@ function itemTotalCents(service: ServiceRecord, quantity: number): number {
   return Math.max(1, Math.round(amount * 100));
 }
 
-function ratePerWan(service: ServiceRecord): number {
-  return service.pricing === 'fixed' ? service.rate : service.rate * 10;
-}
-
 function formatQty(quantity: number): string {
-  if (quantity >= 10000) return `${Number((quantity / 10000).toFixed(2))} 万`;
   return quantity.toLocaleString('en-US');
 }
 
@@ -169,7 +164,7 @@ function itemSnapshots(order: IncomingOrder) {
         platform: service.platformName,
         quantity: item.quantity,
         target: item.target,
-        rate: ratePerWan(service),
+        rate: service.rate,
         pricing: service.pricing,
         subtotalCents: itemTotalCents(service, item.quantity),
       },
@@ -191,9 +186,9 @@ function buildMessage(order: IncomingOrder, orderId: string, totalCents: number)
   order.items.forEach((item, index) => {
     const service = SERVICES.get(item.id);
     if (!service) return;
-    const unit = service.pricing === 'fixed' ? '件' : '万次';
+    const unit = service.pricing === 'fixed' ? '件' : '1k';
     const subtotal = itemTotalCents(service, item.quantity);
-    const shownRate = Number(ratePerWan(service).toFixed(service.pricing === 'fixed' ? 2 : 4));
+    const shownRate = Number(service.rate.toFixed(4));
     lines.push(
       `${index + 1}. ${escapeHtml(service.name.slice(0, 120))}`,
       `   ${formatQty(item.quantity)} × $${shownRate} / ${unit} = ${money(subtotal)}`,

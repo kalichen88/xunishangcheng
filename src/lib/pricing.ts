@@ -13,8 +13,8 @@ export function defaultQuantity(service: Service): number {
 
 export function stepFor(service: Service): number {
   if (service.pricing === 'fixed') return 1;
-  if (service.min >= 1000) return 1000;
-  if (service.min >= 100) return 100;
+  if (service.min >= 1000) return 100;
+  if (service.min >= 100) return 10;
   return 1;
 }
 
@@ -22,29 +22,22 @@ export function quantityUnit(service: Service): string {
   return service.pricing === 'fixed' ? '件' : '次';
 }
 
-export const RATE_QUANTITY = 10000;
-
-/** Catalog rates are stored per 1,000 for per1000 services; display them per 10,000. */
-export function ratePerWan(service: Pick<Service, 'rate' | 'pricing'>): number {
-  return service.pricing === 'fixed' ? service.rate : service.rate * (RATE_QUANTITY / 1000);
-}
-
 export function formatServiceRate(service: Pick<Service, 'rate' | 'pricing'>): string {
-  return formatRate(ratePerWan(service));
+  return formatRate(service.rate);
 }
 
-export function formatSnapshotRate(rate: number, pricing: Service['pricing']): string {
-  return formatRate(pricing === 'fixed' ? rate : rate * (RATE_QUANTITY / 1000));
+export function formatSnapshotRate(rate: number, _pricing: Service['pricing']): string {
+  return formatRate(rate);
+}
+
+export function formatCnyRate(service: Pick<Service, 'rateCny'>): string {
+  return `¥${new Intl.NumberFormat('zh-CN', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 3,
+  }).format(service.rateCny)}`;
 }
 
 export function formatQuantity(quantity: number): string {
-  if (quantity >= 10000) {
-    const wan = quantity / 10000;
-    return `${new Intl.NumberFormat('zh-CN', {
-      maximumFractionDigits: 2,
-      minimumFractionDigits: 0,
-    }).format(wan)} 万`;
-  }
   return quantity.toLocaleString('zh-CN');
 }
 
@@ -78,11 +71,11 @@ export function usdtAmount(cents: number): string {
 }
 
 export function rateUnit(service: Service): string {
-  return service.pricing === 'fixed' ? '件' : '万次';
+  return service.pricing === 'fixed' ? '件' : '1k';
 }
 
 export function pricingModeLabel(service: Service): string {
-  return service.pricing === 'fixed' ? '整包价' : '每万次';
+  return service.pricing === 'fixed' ? '整包价' : '每 1k';
 }
 
 export function deliveryLabel(service: Service): string {

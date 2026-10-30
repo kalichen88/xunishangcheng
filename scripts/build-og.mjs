@@ -62,25 +62,25 @@ await page.setContent(`<!doctype html>
     </div>
     <div class="tag">Social growth store · 2026</div>
     <h1>流量不是玄学，<br>增长<em>可以算清</em>。</h1>
-    <p class="sub">10 个主流平台，3,959 项明码标价的社媒增长服务。<br>美元计价，USDT-TRC20 结算，按需起量。</p>
+    <p class="sub">9 个主流平台，3,943 项明码标价的社媒增长服务。<br>美元计价，USDT-TRC20 结算，按需起量。</p>
     <div class="chips"><span class="chip">Telegram</span><span class="chip">Instagram</span><span class="chip">TikTok</span><span class="chip">YouTube</span><span class="chip">USDT-TRC20</span></div>
   </div>
   <div class="right">
     <div class="lime">
       <div class="label"><span>AU Index</span><span>2026</span></div>
-      <div class="big">3,959</div>
+      <div class="big">3,943</div>
       <p>项服务，随时可下单</p>
       <div class="bars"><span class="bar" style="height:38%"></span><span class="bar" style="height:52%"></span><span class="bar" style="height:45%"></span><span class="bar" style="height:64%"></span><span class="bar" style="height:57%"></span><span class="bar" style="height:74%"></span><span class="bar" style="height:66%"></span><span class="bar" style="height:88%"></span><span class="bar" style="height:79%"></span><span class="bar" style="height:98%"></span></div>
     </div>
-    <div class="pill">参考交付 · 59 分钟</div>
+    <div class="pill">参考交付 · 8 小时 37 分钟</div>
     <div class="card">
       <div class="top"><span>示例订单</span><span class="status">进行中</span></div>
       <div class="service">
         <div class="tg"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div>
-        <div><div class="sname">Telegram 成员 90天不掉落</div><div class="smeta">$0.8686 / 万次 · 起订 100</div></div>
+        <div><div class="sname">Telegram 成员 90天不掉落</div><div class="smeta">$0.2206 / 1k · 原站 ¥1.544 / 1k</div></div>
       </div>
       <div class="progress"><div class="prow"><span>参考进度</span><span>68%</span></div><div class="track"><div class="fill"></div></div></div>
-      <div class="stats"><div class="stat"><b>100</b><span>起订</span></div><div class="stat"><b>$0.01</b><span>小计</span></div><div class="stat"><b>59 分钟</b><span>参考时效</span></div></div>
+      <div class="stats"><div class="stat"><b>500</b><span>起订</span></div><div class="stat"><b>$0.11</b><span>小计</span></div><div class="stat"><b>8h37</b><span>参考时效</span></div></div>
     </div>
   </div>
 </div>

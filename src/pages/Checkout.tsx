@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Check, Copy, Loader2, Lock, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Loader2, Lock, ShieldCheck } from 'lucide-react';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { PlatformBadge } from '@/components/PlatformIcon';
 import { PaymentQr } from '@/components/PaymentQr';
@@ -265,27 +265,8 @@ export function Checkout() {
                 </span>
               </div>
 
-              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-stretch">
-                <div className="min-w-0 flex-1 rounded-xl border border-cream/10 bg-cream/[0.05] p-3">
-                  <p className="text-[9px] tracking-[0.12em] text-cream/35 uppercase">收款地址</p>
-                  <div className="mt-1.5 flex items-start gap-2">
-                    <code className="min-w-0 flex-1 break-all font-mono text-[11px] leading-relaxed text-lime">
-                      {payment.address}
-                    </code>
-                    <button
-                      type="button"
-                      onClick={copyAddress}
-                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-cream/15 text-cream/60 transition hover:border-lime hover:text-lime"
-                      aria-label="复制 USDT 收款地址"
-                    >
-                      <Copy size={13} />
-                    </button>
-                  </div>
-                  <p className="mt-2 text-[9px] leading-relaxed text-cream/35">
-                    仅支持 TRC20 网络 · 1 USD = 1 USDT
-                  </p>
-                </div>
-                <PaymentQr size={104} className="mx-auto shrink-0 sm:mx-0" />
+              <div className="mt-4 flex justify-center">
+                <PaymentQr size={168} onCopy={copyAddress} />
               </div>
 
               <div className="mt-4 flex items-end justify-between border-t border-cream/10 pt-3">

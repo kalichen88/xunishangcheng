@@ -251,7 +251,7 @@ export function Admin() {
                         <p className="text-[11px] font-medium text-ink">{item.name}</p>
                         <p className="num mt-0.5 text-[10px] text-muted">
                           {formatQuantity(item.quantity)} × ${formatRate(item.rate)} /{' '}
-                          {item.pricing === 'fixed' ? '件' : '万次'} · 目标：
+                          {item.pricing === 'fixed' ? '件' : '1k'} · 目标：
                           {item.target || '待补充'}
                         </p>
                       </div>

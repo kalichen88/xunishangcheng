@@ -6,8 +6,8 @@ import { formatRate } from '@/lib/pricing';
 
 const TRENDING = ['Telegram 成员', 'Instagram 关注', 'TikTok 播放', 'YouTube 订阅'];
 
-const lowestPerWan = Math.min(
-  ...catalog.services.filter((service) => service.pricing === 'per1000').map((service) => service.rate * 10),
+const lowestRate = Math.min(
+  ...catalog.services.filter((service) => service.pricing === 'per1000').map((service) => service.rate),
 );
 
 export function HeroSearch() {
@@ -60,7 +60,7 @@ export function HeroSearch() {
           {[
             { value: catalog.total.toLocaleString('zh-CN'), label: '在售服务' },
             { value: String(platforms.length), label: '覆盖平台' },
-            { value: `$${formatRate(lowestPerWan)}`, label: '万次起价' },
+            { value: `$${formatRate(lowestRate)}`, label: '1k 起价' },
             { value: String(catalog.types.length), label: '服务类型' },
           ].map((stat) => (
             <div key={stat.label}>

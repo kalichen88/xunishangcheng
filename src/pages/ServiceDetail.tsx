@@ -26,6 +26,7 @@ import {
   clampQuantity,
   defaultQuantity,
   deliveryLabel,
+  formatCnyRate,
   formatMoney,
   formatQuantity,
   formatServiceRate,
@@ -168,6 +169,9 @@ export function ServiceDetail() {
               <span className="font-medium text-ink">
                 ${formatServiceRate(service)} / {rateUnit(service)}
               </span>
+              <span className="ml-1 text-[11px] text-muted">
+                （原站 {formatCnyRate(service)} / {rateUnit(service)}）
+              </span>
               。起订 {formatQuantity(service.min)} {unit}，单次最多 {formatQuantity(service.max)} {unit}，参考交付时间{' '}
               {deliveryLabel(service)}。下单时提供公开的目标链接或用户名即可，USDT 到账与排期由客服确认。
             </p>
@@ -197,6 +201,7 @@ export function ServiceDetail() {
                   ['目录分类', service.category],
                   ['计费方式', pricingModeLabel(service)],
                   ['单价', `$${formatServiceRate(service)} / ${rateUnit(service)}`],
+                  ['原站单价', `${formatCnyRate(service)} / ${rateUnit(service)}`],
                   ['起订 / 上限', `${formatQuantity(service.min)} – ${formatQuantity(service.max)} ${unit}`],
                   ['参考交付', deliveryLabel(service)],
                   ['服务编号', `#${service.id}`],
@@ -211,8 +216,39 @@ export function ServiceDetail() {
                 ))}
               </dl>
               <p className="mt-2 text-[10px] text-muted/60">
-                目录快照更新于 2026-10-29。价格与时效可能随供应变化，结算时以购物车为准。
+                目录快照更新于 2026-10-30。价格、时效与说明可能随供应变化，结算时以购物车为准。
               </p>
+            </section>
+
+            <section className="mt-10">
+              <h2 className="text-[14px] font-semibold text-ink">购买说明</h2>
+              <dl className="mt-3 overflow-hidden rounded-2xl border border-line bg-cream">
+                {[
+                  ['开始', service.description.start],
+                  ['速度', service.description.speed],
+                  ['掉落', service.description.drop],
+                  ['补充', service.description.refill],
+                  ['链接', service.description.link],
+                ].map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="grid grid-cols-[64px_1fr] gap-4 border-b border-line px-4 py-3 last:border-b-0 sm:grid-cols-[96px_1fr] sm:px-5"
+                  >
+                    <dt className="text-[11px] text-muted">{label}</dt>
+                    <dd className="text-[12px] font-medium text-ink">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <div className="mt-3 rounded-2xl border border-line bg-lime/25 p-4">
+                <p className="text-[11px] font-semibold text-ink">注意</p>
+                <ul className="mt-2 space-y-1.5">
+                  {service.description.notes.map((note, index) => (
+                    <li key={note} className="text-[11px] leading-relaxed text-muted">
+                      {index + 1}. {note}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </section>
 
             <section className="mt-10">
@@ -265,6 +301,9 @@ export function ServiceDetail() {
                       ${formatServiceRate(service)}
                     </span>
                     <span className="text-[11px] text-muted">/ {rateUnit(service)}</span>
+                  </p>
+                  <p className="mt-1 text-[10px] text-muted/70">
+                    原站 {formatCnyRate(service)} / {rateUnit(service)}
                   </p>
                 </div>
                 <span className="rounded-full border border-line px-2.5 py-1 text-[10px] text-muted">

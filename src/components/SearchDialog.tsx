@@ -79,7 +79,7 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
             ref={inputRef}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="搜索 3,959 项服务、平台或场景…"
+            placeholder="搜索 3,943 项服务、平台或场景…"
             className="h-[62px] w-full bg-transparent text-[15px] text-ink outline-none placeholder:text-muted/65"
             aria-label="搜索服务"
             autoComplete="off"

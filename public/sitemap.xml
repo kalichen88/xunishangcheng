@@ -3283,6 +3283,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://tidesmm.kalichen80.workers.dev/service/887</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://tidesmm.kalichen80.workers.dev/service/897</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
@@ -3884,6 +3890,12 @@
   </url>
   <url>
     <loc>https://tidesmm.kalichen80.workers.dev/service/1161</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://tidesmm.kalichen80.workers.dev/service/1162</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -4549,12 +4561,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1499</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://tidesmm.kalichen80.workers.dev/service/1500</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
@@ -4987,18 +4993,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1724</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1726</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://tidesmm.kalichen80.workers.dev/service/1739</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
@@ -5114,54 +5108,6 @@
   </url>
   <url>
     <loc>https://tidesmm.kalichen80.workers.dev/service/1816</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1827</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1828</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1830</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1831</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1832</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1833</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1834</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/1836</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -6158,42 +6104,6 @@
   </url>
   <url>
     <loc>https://tidesmm.kalichen80.workers.dev/service/2266</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/2268</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/2270</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/2271</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/2273</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/2274</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/2275</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -10489,18 +10399,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/3855</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/3856</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://tidesmm.kalichen80.workers.dev/service/3858</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
@@ -10532,6 +10430,12 @@
   </url>
   <url>
     <loc>https://tidesmm.kalichen80.workers.dev/service/3871</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://tidesmm.kalichen80.workers.dev/service/3874</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -11462,6 +11366,12 @@
   </url>
   <url>
     <loc>https://tidesmm.kalichen80.workers.dev/service/4172</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://tidesmm.kalichen80.workers.dev/service/4173</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -13964,12 +13874,6 @@
   </url>
   <url>
     <loc>https://tidesmm.kalichen80.workers.dev/service/4760</loc>
-    <lastmod>2026-10-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://tidesmm.kalichen80.workers.dev/service/4763</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

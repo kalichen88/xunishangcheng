@@ -26,7 +26,7 @@ export function Cart() {
             购物车还是空的
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-muted">
-            从 3,959 项服务里挑一项开始。可以先小量尝试，再决定是否放量。
+            从 3,943 项服务里挑一项开始。可以先小量尝试，再决定是否放量。
           </p>
           <div className="mt-7 flex justify-center gap-3">
             <Link to="/services" className="btn btn-dark">

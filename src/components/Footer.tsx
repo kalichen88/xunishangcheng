@@ -32,7 +32,7 @@ export function Footer() {
           <div>
             <Logo tone="light" />
             <p className="mt-5 max-w-[290px] text-[13px] leading-relaxed text-cream/50">
-              独立第三方社媒增长服务商。10 个平台，3,959 项明码标价的服务，按需起量。
+              独立第三方社媒增长服务商。9 个平台，3,943 项明码标价的服务，按需起量。
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
               <a

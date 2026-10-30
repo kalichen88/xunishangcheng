@@ -211,7 +211,7 @@ export function OrderDetail() {
                       </Link>
                       <p className="num mt-1 text-[10px] text-muted">
                         {formatQuantity(item.quantity)} {item.pricing === 'fixed' ? '件' : '次'} × $
-                        {formatRate(item.rate)} / {item.pricing === 'fixed' ? '件' : '万次'}
+                        {formatRate(item.rate)} / {item.pricing === 'fixed' ? '件' : '1k'}
                       </p>
                       <p className="mt-1 break-all text-[10px] text-muted">
                         目标：{item.target || '待补充'}
@@ -294,27 +294,8 @@ export function OrderDetail() {
               <p className="num text-[9.5px] text-cream/45">
                 = {usdtAmount(order.totalCents)} USDT
               </p>
-              <div className="mt-3 flex flex-col items-center">
-                <PaymentQr size={120} />
-                <p className="mt-1 text-[8px] tracking-[0.1em] text-cream/35 uppercase">
-                  扫码支付 · 仅 TRC20
-                </p>
-              </div>
-              <div className="mt-3 rounded-xl border border-cream/10 bg-cream/[0.05] p-2.5">
-                <p className="text-[8.5px] tracking-[0.1em] text-cream/35 uppercase">收款地址</p>
-                <div className="mt-1 flex items-start gap-1.5">
-                  <code className="min-w-0 flex-1 break-all font-mono text-[9.5px] leading-relaxed text-lime">
-                    {payment.address}
-                  </code>
-                  <button
-                    type="button"
-                    onClick={copyAddress}
-                    className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-cream/15 text-cream/60 transition hover:border-lime hover:text-lime"
-                    aria-label="复制 USDT 收款地址"
-                  >
-                    <Copy size={10} />
-                  </button>
-                </div>
+              <div className="mt-3 flex justify-center">
+                <PaymentQr size={176} onCopy={copyAddress} />
               </div>
               <p className="mt-2 text-[9px] leading-relaxed text-cream/40">
                 转账后请把交易哈希（TxID）发送给 {site.telegramHandle} 核对，仅支持 TRC20。

@@ -22,6 +22,15 @@ export type ServiceTypeKey =
 
 export type PricingMode = 'per1000' | 'fixed';
 
+export interface ServiceDescription {
+  start: string;
+  speed: string;
+  drop: string;
+  refill: string;
+  link: string;
+  notes: string[];
+}
+
 export interface Service {
   id: number;
   platform: PlatformKey;
@@ -31,11 +40,13 @@ export interface Service {
   name: string;
   type: ServiceTypeKey;
   rate: number;
+  rateCny: number;
   min: number;
   max: number;
   avgTime: string;
   avgMinutes: number | null;
   pricing: PricingMode;
+  description: ServiceDescription;
   hot: boolean;
 }
 

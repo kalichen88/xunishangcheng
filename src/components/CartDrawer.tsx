@@ -68,7 +68,7 @@ export function CartDrawer() {
             </span>
             <p className="mt-5 text-base font-semibold text-ink">购物车还是空的</p>
             <p className="mt-2 max-w-[260px] text-[13px] leading-relaxed text-muted">
-              从 3,959 项服务里挑一项，按需起量。先加购，再核对目标链接。
+              从 3,943 项服务里挑一项，按需起量。先加购，再核对目标链接。
             </p>
             <button
               type="button"
@@ -95,7 +95,7 @@ export function CartDrawer() {
                           {service.name}
                         </p>
                         <p className="mt-1 text-[11px] text-muted">
-                          ${formatServiceRate(service)} / {service.pricing === 'fixed' ? '件' : '万次'} · 起订{' '}
+                          ${formatServiceRate(service)} / {service.pricing === 'fixed' ? '件' : '1k'} · 起订{' '}
                           {formatQuantity(service.min)}
                         </p>
                       </div>

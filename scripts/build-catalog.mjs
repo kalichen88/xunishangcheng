@@ -86,7 +86,40 @@ function cleanCategory(name) {
     .trim();
 }
 
+function buildDescription(name, platform) {
+  const speed = name.match(/(\d+(?:\.\d+)?)\s*([kKmM])\s*(?:\/\s*天|每天)/);
+  const drop = name.match(/(\d+)\s*天不掉落/);
+  const refill = name.match(/(\d+)\s*天补充/);
+  const linkMap = {
+    telegram: '群组或频道链接',
+    instagram: '主页、帖子或 Reel 链接',
+    tiktok: '视频链接或主页链接',
+    youtube: '视频、Shorts 或频道链接',
+    twitter: '帖子链接或主页链接',
+    facebook: '主页、帖子或视频链接',
+    whatsapp: '频道链接或邀请链接',
+    discord: '服务器邀请链接',
+    linkedin: '公司页面、个人主页或帖子链接',
+    threads: '帖子链接或主页链接',
+  };
+  return {
+    start: '0–24 小时',
+    speed: speed ? `${speed[1]}${speed[2].toUpperCase()}/天` : '以实际交付为准',
+    drop: drop ? `${drop[1]} 天不掉落` : /不掉落/.test(name) ? '不掉落' : '以服务说明为准',
+    refill: refill ? `${refill[1]} 天补充` : /无补充/.test(name) ? '无补充' : '以服务说明为准',
+    link: linkMap[platform.key] ?? '目标链接或用户名',
+    notes: [
+      '链接失效或修改用户名可能视为订单完成。',
+      '实际交付速度会随平台风控与服务器负载波动。',
+      '请勿同时下单多个相同类别的服务，避免互相影响。',
+    ],
+  };
+}
+
 const services = [];
+const DESCRIPTION_OVERRIDES = {
+  3021: { speed: '50k/天', refill: '无补充' },
+};
 for (const raw of source.services) {
   if (String(raw.id) === '668') continue; // "补差价专用" is a checkout utility, not a product.
   const platform = resolvePlatform(raw);
@@ -99,6 +132,8 @@ for (const raw of source.services) {
   const type = resolveType(name);
   const category = cleanCategory(CATEGORY_NAMES.get(String(raw.categoryId)) || platform.name);
   const avgMinutes = parseMinutes(raw.avgTime);
+  const description = buildDescription(name, platform);
+  Object.assign(description, DESCRIPTION_OVERRIDES[raw.id] ?? {});
   services.push({
     id: Number(raw.id),
     platform: platform.key,
@@ -108,11 +143,13 @@ for (const raw of source.services) {
     name,
     type,
     rate: Number((rate / CNY_PER_USD).toFixed(5)),
+    rateCny: rate,
     min,
     max,
     avgTime: clean(raw.avgTime) || '以客服确认为准',
     avgMinutes,
     pricing,
+    description,
     hot: String(raw.categoryId) === '363',
   });
 }
@@ -127,11 +164,11 @@ for (const s of services) {
 }
 
 // Hand-picked from the live catalog: one strong entry per major platform.
-const featuredIds = [885, 4818, 5499, 1071, 1517, 4001, 3855, 4284];
+const featuredIds = [885, 3022, 4818, 5499, 1071, 1517, 4001, 4284];
 const featured = featuredIds.map((id) => services.find((s) => s.id === id)).filter(Boolean);
 
 const output = {
-  generatedAt: '2026-10-29',
+  generatedAt: '2026-10-30',
   currency: 'USD',
   exchangeRateCnyPerUsd: CNY_PER_USD,
   total: services.length,
@@ -139,7 +176,7 @@ const output = {
     key: p.key,
     name: p.name,
     count: platformCounts[p.key] || 0,
-  })),
+  })).filter((p) => p.count > 0),
   types: [
     { key: 'members', name: '成员 / 关注' },
     { key: 'views', name: '浏览 / 播放' },
